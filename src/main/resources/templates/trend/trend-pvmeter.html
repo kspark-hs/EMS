@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>PV 전력량계</title>
+</head>
+
+<body>
+
+<div th:fragment="content" class="flex-1 p-6 bg-gray-100 space-y-4">
+
+    <!-- ================= Page Header ================= -->
+    <div th:replace="~{
+        fragment/page/page-header :: pageHeader(
+            'PV 전력량계',
+            '모니터링 &nbsp;›&nbsp; 트렌드 &nbsp;›&nbsp;
+             <span class=&quot;text-gray-700 font-medium&quot;>PV 전력량계</span>',
+            ~{::emptySelector}
+        )
+    }"></div>
+    <div th:fragment="emptySelector"></div>
+
+    <!-- ================= Summary Cards ================= -->
+    <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+        <div class="bg-white rounded-xl shadow p-4">
+            <div class="text-sm text-gray-500">금일 발전량</div>
+            <div class="text-2xl font-semibold mt-1">
+                337.05 <span class="text-base font-normal">kWh</span>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow p-4">
+            <div class="text-sm text-gray-500">금일 최대 유효전력</div>
+            <div class="text-2xl font-semibold mt-1">
+                171.92 <span class="text-base font-normal">kW</span>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow p-4">
+            <div class="text-sm text-gray-500">평균 역률</div>
+            <div class="text-2xl font-semibold mt-1">0.97</div>
+        </div>
+
+        <!-- ✅ 계측 신뢰도 카드 -->
+        <div class="bg-white rounded-xl shadow p-4">
+            <div class="text-sm text-gray-500">계측 신뢰도</div>
+            <div class="text-2xl font-semibold mt-1 text-green-600">
+                정상 92%
+            </div>
+            <div class="text-xs text-gray-500 mt-1">
+                급락 1회 · 통신지연 1회
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ================= Trend Chart ================= -->
+    <section class="bg-white rounded-xl shadow p-4">
+
+        <div class="flex items-center justify-between mb-3">
+            <div class="font-semibold text-gray-800">
+                PV 출력 계측 트렌드 (5분)
+            </div>
+
+            <div class="flex gap-2 text-sm">
+                <button class="px-3 py-1 rounded bg-gray-100 text-gray-600">수신주기</button>
+                <button class="px-3 py-1 rounded bg-blue-600 text-white">유효전력</button>
+                <button class="px-3 py-1 rounded bg-gray-100 text-gray-600">주파수</button>
+            </div>
+        </div>
+
+
+        <div class="w-full h-[360px] bg-gray-50 rounded-lg flex items-center justify-center">
+            <svg
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 1000 360"
+                    xmlns="http://www.w3.org/2000/svg"
+            >
+
+                <!-- X축 -->
+                <line x1="80" y1="300" x2="960" y2="300" stroke="#9ca3af" stroke-width="2"/>
+
+                <!-- Y축 -->
+                <line x1="80" y1="40" x2="80" y2="300" stroke="#9ca3af" stroke-width="2"/>
+
+                <!-- Y축 라벨 -->
+                <g fill="#374151" font-size="12" text-anchor="end">
+                    <text x="70" y="300">0</text>
+                    <text x="70" y="240">50</text>
+                    <text x="70" y="180">100</text>
+                    <text x="70" y="120">150</text>
+                    <text x="70" y="60">200</text>
+                </g>
+
+                <!-- X축 라벨 -->
+                <g fill="#374151" font-size="12" text-anchor="middle">
+                    <text x="200" y="325">10:30</text>
+                    <text x="360" y="325">11:00</text>
+                    <text x="520" y="325">11:30</text>
+                    <text x="680" y="325">12:00</text>
+                    <text x="840" y="325">12:30</text>
+                </g>
+
+                <!-- Grid -->
+                <g stroke="#e5e7eb" stroke-width="1">
+                    <line x1="80" y1="240" x2="960" y2="240"/>
+                    <line x1="80" y1="180" x2="960" y2="180"/>
+                    <line x1="80" y1="120" x2="960" y2="120"/>
+                    <line x1="80" y1="60" x2="960" y2="60"/>
+                </g>
+
+                <!-- 데이터 선 -->
+                <path
+                        d="M80,280
+               L160,250
+               L240,200
+               L320,160
+               L400,130
+               L480,170
+               L560,120
+               L640,160
+               L720,140
+               L800,180
+               L880,240"
+                        fill="none"
+                        stroke="#2563eb"
+                        stroke-width="1.5"
+                />
+
+                <!-- 주의 마커 -->
+                <circle cx="560" cy="120" r="7" fill="#f59e0b"/>
+                <text x="572" y="112" font-size="13" fill="#374151">주의</text>
+
+            </svg>
+        </div>
+
+
+    </section>
+
+    <!-- ================= Time Trend Table ================= -->
+    <section class="bg-white rounded-xl shadow p-4">
+
+        <div class="font-semibold text-gray-800 mb-3">
+            시간대별 계측 트렌드
+        </div>
+
+        <div class="max-h-[280px] overflow-y-auto">
+            <table class="w-full text-sm border-t">
+                <thead class="text-gray-600 sticky top-0 bg-white">
+                <tr class="border-b">
+                    <th class="py-2 text-left">시간</th>
+                    <th class="py-2 text-center">상태</th>
+                    <th class="py-2 text-right">수신주기(ms)</th>
+                    <th class="py-2 text-right">유효전력(kW)</th>
+                    <th class="py-2 text-right">주파수(Hz)</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr class="border-b">
+                    <td class="py-2">10:55</td>
+                    <td class="py-2 text-center text-green-600 font-semibold">정상</td>
+                    <td class="py-2 text-right">180</td>
+                    <td class="py-2 text-right">162.3</td>
+                    <td class="py-2 text-right">60.1</td>
+                </tr>
+
+                <tr class="border-b">
+                    <td class="py-2">11:00</td>
+                    <td class="py-2 text-center text-orange-600 font-semibold">주의</td>
+                    <td class="py-2 text-right text-orange-600">980</td>
+                    <td class="py-2 text-right">148.7</td>
+                    <td class="py-2 text-right">60.0</td>
+                </tr>
+
+                <tr>
+                    <td class="py-2">11:05</td>
+                    <td class="py-2 text-center text-orange-600 font-semibold">주의</td>
+                    <td class="py-2 text-right text-orange-600">1020</td>
+                    <td class="py-2 text-right">151.2</td>
+                    <td class="py-2 text-right">60.1</td>
+                </tr>
+
+                <tr>
+                    <td class="py-2">11:10</td>
+                    <td class="py-2 text-center text-orange-600 font-semibold">주의</td>
+                    <td class="py-2 text-right text-orange-600">1020</td>
+                    <td class="py-2 text-right">151.2</td>
+                    <td class="py-2 text-right">60.1</td>
+                </tr>
+
+                <tr>
+                    <td class="py-2">11:15</td>
+                    <td class="py-2 text-center text-orange-600 font-semibold">주의</td>
+                    <td class="py-2 text-right text-orange-600">1020</td>
+                    <td class="py-2 text-right">151.2</td>
+                    <td class="py-2 text-right">60.1</td>
+                </tr>
+
+                <tr>
+                    <td class="py-2">11:20</td>
+                    <td class="py-2 text-center text-orange-600 font-semibold">주의</td>
+                    <td class="py-2 text-right text-orange-600">1020</td>
+                    <td class="py-2 text-right">151.2</td>
+                    <td class="py-2 text-right">60.1</td>
+                </tr>
+
+                <tr>
+                    <td class="py-2">11:25</td>
+                    <td class="py-2 text-center text-orange-600 font-semibold">주의</td>
+                    <td class="py-2 text-right text-orange-600">1020</td>
+                    <td class="py-2 text-right">151.2</td>
+                    <td class="py-2 text-right">60.1</td>
+                </tr>
+
+                <tr>
+                    <td class="py-2">11:30</td>
+                    <td class="py-2 text-center text-orange-600 font-semibold">주의</td>
+                    <td class="py-2 text-right text-orange-600">1020</td>
+                    <td class="py-2 text-right">151.2</td>
+                    <td class="py-2 text-right">60.1</td>
+                </tr>
+
+                <tr>
+                    <td class="py-2">11:35</td>
+                    <td class="py-2 text-center text-orange-600 font-semibold">주의</td>
+                    <td class="py-2 text-right text-orange-600">1020</td>
+                    <td class="py-2 text-right">151.2</td>
+                    <td class="py-2 text-right">60.1</td>
+                </tr>
+
+                <tr>
+                    <td class="py-2">11:40</td>
+                    <td class="py-2 text-center text-orange-600 font-semibold">주의</td>
+                    <td class="py-2 text-right text-orange-600">1020</td>
+                    <td class="py-2 text-right">151.2</td>
+                    <td class="py-2 text-right">60.1</td>
+                </tr>
+
+                <tr>
+                    <td class="py-2">11:45</td>
+                    <td class="py-2 text-center text-orange-600 font-semibold">주의</td>
+                    <td class="py-2 text-right text-orange-600">1020</td>
+                    <td class="py-2 text-right">151.2</td>
+                    <td class="py-2 text-right">60.1</td>
+                </tr>
+
+                <tr>
+                    <td class="py-2">11:50</td>
+                    <td class="py-2 text-center text-orange-600 font-semibold">주의</td>
+                    <td class="py-2 text-right text-orange-600">1020</td>
+                    <td class="py-2 text-right">151.2</td>
+                    <td class="py-2 text-right">60.1</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+
+
+</div>
+
+</body>
+</html>

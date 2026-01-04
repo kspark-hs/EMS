@@ -1,0 +1,28 @@
+INSERT INTO members (
+    email,
+    password,
+    name,
+    phone,
+    authority,
+    is_active,
+    created_at
+)
+VALUES
+(
+    'ksparkhs@naver.com',
+    '$2a$10$wE5G5ZKc8vV4vN2xX6uQyOeVvOZkZ9bYk4y1m3a9n8yZ0d6fCkQp6',
+    '박강석',
+    '010-6569-8569',
+    'ROLE_ADMIN',
+    TRUE,
+    CURRENT_TIMESTAMP
+),
+(
+    'sbtrchs@korea.com',
+    '$2a$10$wE5G5ZKc8vV4vN2xX6uQyOeVvOZkZ9bYk4y1m3a9n8yZ0d6fCkQp6',
+    '최행선',
+    '010-6555-8561',
+    'ROLE_USER',
+    TRUE,
+    CURRENT_TIMESTAMP
+);

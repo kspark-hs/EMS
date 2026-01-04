@@ -1,0 +1,62 @@
+<div th:fragment="batteryFaultStatusCard"
+     class="bg-white rounded-xl shadow p-4 min-h-[180px]">
+
+    <!-- 카드 헤더 -->
+    <div class="flex items-center gap-2 pb-2 mb-3 border-b border-gray-200">
+        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+        <h3 class="font-semibold text-gray-800">고장 상태</h3>
+    </div>
+
+    <!-- 카드 내용 -->
+    <div class="space-y-2 text-sm">
+
+        <!-- 고장 발생 -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">고장 발생</span>
+            <span class="font-semibold"
+                  th:classappend="${batteryFaultStatus.faultOccurred == '있음'}
+                                  ? 'text-red-600'
+                                  : 'text-green-600'"
+                  th:text="${batteryFaultStatus.faultOccurred}">
+                없음
+            </span>
+        </div>
+
+        <!-- 내부 통신 상태 -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">내부 통신 상태</span>
+            <span class="font-semibold"
+                  th:classappend="${batteryFaultStatus.internalCommStatus == '장애'}
+                                  ? 'text-red-600'
+                                  : 'text-green-600'"
+                  th:text="${batteryFaultStatus.internalCommStatus}">
+                정상
+            </span>
+        </div>
+
+        <!-- 외부 통신 상태 -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">외부 통신 상태</span>
+            <span class="font-semibold"
+                  th:classappend="${batteryFaultStatus.externalCommStatus == '장애'}
+                                  ? 'text-red-600'
+                                  : 'text-green-600'"
+                  th:text="${batteryFaultStatus.externalCommStatus}">
+                정상
+            </span>
+        </div>
+
+        <!-- 인터록 상태 -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">인터록 상태</span>
+            <span class="font-semibold"
+                  th:classappend="${batteryFaultStatus.interlockStatus == '동작'}
+                                  ? 'text-red-600'
+                                  : 'text-green-600'"
+                  th:text="${batteryFaultStatus.interlockStatus}">
+                정상
+            </span>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<aside id="sidebar-monitoring"
+       th:fragment="sidebarMonitoring"
+       class="w-56 bg-white border-r border-gray-200
+              flex flex-col flex-shrink-0 transition-all duration-200">
+
+    <!-- ================= MENU ================= -->
+    <nav class="flex-1 min-h-0 py-4 text-gray-800 text-sm">
+
+        <!-- 통합발전현황 -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenu('dashboard')">
+                <span class="menu-left">
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="16" rx="2"/>
+                        <rect x="4.5" y="5.5" width="7" height="6" rx="1"/>
+                        <rect x="13.5" y="5.5" width="5.5" height="4" rx="1"/>
+                        <rect x="4.5" y="12.5" width="5.5" height="6" rx="1"/>
+                        <rect x="13.5" y="11" width="5.5" height="7.5" rx="1"/>
+                    </svg>
+                    통합발전현황
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+            <div id="menu-dashboard" class="menu-sub">
+                <a th:href="@{/}" class="menu-sub-item">대시보드</a>
+            </div>
+        </div>
+
+        <!-- 발전소현황 -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenu('plant')">
+                <span class="menu-left">
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                        <rect x="4" y="7" width="3" height="11" rx="0.6"/>
+                        <rect x="5" y="5" width="2" height="2" rx="0.5"/>
+                        <rect x="9" y="9" width="11" height="9" rx="1"/>
+                    </svg>
+                    발전소현황
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+            <div id="menu-plant" class="menu-sub">
+                <a th:href="@{/plant/info}" class="menu-sub-item">발전소 정보</a>
+                <a th:href="@{/plant/list}" class="menu-sub-item">발전소 리스트</a>
+            </div>
+        </div>
+
+        <!-- 개별운전현황 -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenu('device')">
+                <span class="menu-left">
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                        <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                    </svg>
+                    개별운전현황
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+            <div id="menu-device" class="menu-sub">
+                <a th:href="@{/individual/pv-inverter}" class="menu-sub-item">태양광 인버터</a>
+                <a th:href="@{/individual/battery}" class="menu-sub-item">배터리</a>
+                <a th:href="@{/individual/pcs}" class="menu-sub-item">PCS</a>
+                <a th:href="@{/individual/pv-power-meter}" class="menu-sub-item">PV 전력량계</a>
+                <a th:href="@{/individual/ess-power-meter}" class="menu-sub-item">ESS 전력량계</a>
+                <a th:href="@{/individual/ess-internal-power-meter}" class="menu-sub-item">
+                    ESS 소내 전력량계
+                </a>
+            </div>
+        </div>
+
+        <!-- 이력정보 -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenu('history')">
+                <span class="menu-left">
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="8"/>
+                        <rect x="11.4" y="7" width="1.2" height="6" rx="0.6"/>
+                        <rect x="12" y="12" width="4" height="1.2" rx="0.6"/>
+                    </svg>
+                    이력정보
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+            <div id="menu-history" class="menu-sub">
+                <a th:href="@{/history/operation}" class="menu-sub-item">운영 이력</a>
+                <a th:href="@{/history/failure}" class="menu-sub-item">고장 이력</a>
+                <a th:href="@{/history/kesco}" class="menu-sub-item">KESCO</a>
+            </div>
+        </div>
+
+        <!-- 트렌드 -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenu('trend')">
+                <span class="menu-left">
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                        <rect x="3" y="20" width="18" height="1"/>
+                        <rect x="4" y="12" width="3" height="8" rx="0.8"/>
+                        <rect x="10" y="8" width="3" height="12" rx="0.8"/>
+                        <rect x="16" y="5" width="3" height="15" rx="0.8"/>
+                    </svg>
+                    트렌드
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+            <div id="menu-trend" class="menu-sub">
+                <a th:href="@{/trend/pvmeter}" class="menu-sub-item">PV 전력량계</a>
+                <a th:href="@{/trend/pcs}" class="menu-sub-item">PCS</a>
+                <a th:href="@{/trend/grid}" class="menu-sub-item">계통</a>
+                <a th:href="@{/trend/report}" class="menu-sub-item">보고서</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= FOOTER ================= -->
+    <div class="border-t bg-white py-3 flex justify-end px-4">
+        <button type="button" onclick="toggleSidebarCompact()"
+                class="w-9 h-9 flex items-center justify-center
+                       rounded bg-gray-200 hover:bg-gray-300">
+            <svg id="sidebarToggleIcon"
+                 class="w-4 h-4 text-gray-700 transition-transform"
+                 viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 6l-6 6 6 6"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- ================= STYLE ================= -->
+    <style>
+        .menu-group { margin-top: 4px; position: relative; }
+
+        .menu-main {
+            width: 100%;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: none;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .menu-main:hover { background: #f1f5f9; }
+
+        .menu-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-icon { width: 18px; height: 18px; fill: #111; }
+
+        .menu-sub {
+            display: none;
+            background: #f8fafc;
+            border-left: 2px solid #e5e7eb;
+            margin-left: 46px;
+            padding: 4px 0;
+        }
+
+        .menu-sub-item {
+            display: block;
+            padding: 8px 16px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .menu-sub-item:hover { background: #e5e7eb; }
+
+        /* ===== compact ===== */
+        html.sidebar-compact #sidebar-monitoring,
+        #sidebar-monitoring.compact {
+            width: 64px !important;
+        }
+
+        html.sidebar-compact .menu-left {
+            font-size: 0;
+        }
+
+        html.sidebar-compact .menu-toggle-icon {
+            display: none;
+        }
+
+        html.sidebar-compact .menu-sub {
+            position: absolute;
+            left: 64px;
+            top: 0;
+            margin-left: 0;
+            min-width: 180px;
+            background: #374151;
+            border-radius: 8px;
+            z-index: 100;
+        }
+
+        html.sidebar-compact .menu-sub-item {
+            color: #fff;
+        }
+
+        html.sidebar-compact .menu-sub-item:hover {
+            background: rgba(255,255,255,0.15);
+        }
+    </style>
+
+    <!-- ================= SCRIPT ================= -->
+    <script>
+        let openedMenuId = null;
+
+        function toggleMenu(id) {
+            const sidebar = document.getElementById('sidebar-monitoring');
+            const isCompact = sidebar.classList.contains('compact');
+
+            document.querySelectorAll('.menu-sub').forEach(m => m.style.display = 'none');
+
+            if (openedMenuId === id && !isCompact) {
+                openedMenuId = null;
+                sessionStorage.removeItem('openedMenuId');
+                return;
+            }
+
+            const menu = document.getElementById('menu-' + id);
+            if (!menu) return;
+
+            menu.style.display = 'block';
+            openedMenuId = id;
+            sessionStorage.setItem('openedMenuId', id);
+        }
+
+        function restoreMenu() {
+            const sidebar = document.getElementById('sidebar-monitoring');
+            if (sidebar.classList.contains('compact')) return;
+
+            const id = sessionStorage.getItem('openedMenuId');
+            if (!id) return;
+
+            const menu = document.getElementById('menu-' + id);
+            if (menu) menu.style.display = 'block';
+        }
+
+        function toggleSidebarCompact() {
+            const sidebar = document.getElementById('sidebar-monitoring');
+            const icon = document.getElementById('sidebarToggleIcon');
+
+            const compact = !sidebar.classList.contains('compact');
+
+            sidebar.classList.toggle('compact', compact);
+            document.documentElement.classList.toggle('sidebar-compact', compact);
+            icon.style.transform = compact ? 'rotate(180deg)' : 'rotate(0deg)';
+
+            // ✅ 상태 저장 (누락되었던 부분)
+            sessionStorage.setItem('sidebarCompact', compact);
+
+            document.querySelectorAll('.menu-sub').forEach(m => m.style.display = 'none');
+
+            if (!compact) restoreMenu();
+        }
+
+        (function init() {
+            const compactSaved = sessionStorage.getItem('sidebarCompact') === 'true';
+            if (compactSaved) {
+                const sidebar = document.getElementById('sidebar-monitoring');
+                sidebar.classList.add('compact');
+                document.documentElement.classList.add('sidebar-compact');
+            }
+            restoreMenu();
+        })();
+    </script>
+
+</aside>
+</html>

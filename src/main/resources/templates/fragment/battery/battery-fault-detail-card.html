@@ -1,0 +1,41 @@
+<div th:fragment="batteryFaultDetailCard"
+     class="bg-white rounded-xl shadow p-4">
+
+    <!-- 카드 헤더 -->
+    <div class="flex items-center pb-2 mb-3 border-b border-gray-200">
+        <div class="flex items-center gap-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-red-500"></span>
+            <h3 class="font-semibold text-gray-800">배터리 고장정보</h3>
+        </div>
+    </div>
+
+    <!-- ⭐ PCS와 동일한 grid -->
+    <div class="
+        grid
+        grid-cols-2
+        md:grid-cols-4
+        gap-x-6
+        gap-y-3
+        text-sm
+    ">
+
+        <div th:each="item : ${batteryFaultDetail}"
+             class="flex items-center gap-2 min-h-[24px]">
+
+            <span class="inline-block w-2 h-2 rounded-full"
+                  th:classappend="${item.fault}
+                        ? 'bg-red-500'
+                        : 'bg-gray-300'">
+            </span>
+
+            <span th:text="${item.label}"
+                  class="leading-none"
+                  th:classappend="${item.fault}
+                        ? 'text-red-600 font-semibold'
+                        : 'text-gray-600'">
+            </span>
+        </div>
+
+    </div>
+
+</div>

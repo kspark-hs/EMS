@@ -1,0 +1,63 @@
+<!-- templates/fragment/pcs/pcs-summary-card.html -->
+<div th:fragment="pcsSummaryCard"
+     class="bg-white rounded-xl shadow p-4 min-h-[180px]">
+
+    <!-- 카드 헤더 -->
+    <div class="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
+        <div class="flex items-center gap-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
+            <h3 class="font-semibold text-gray-800">PCS 요약</h3>
+        </div>
+    </div>
+
+    <!-- 카드 내용 -->
+    <div class="space-y-2 text-sm">
+
+        <!-- PCS 상태 -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">PCS 상태</span>
+            <span class="font-semibold text-green-600"
+                  th:text="${pcsSummary.pcsStatus}">
+                운전
+            </span>
+        </div>
+
+        <!-- 충/방전 상태 -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">충/방전 상태</span>
+            <span class="font-semibold text-green-600"
+                  th:text="${pcsSummary.chargeDischargeStatus}">
+                대기
+            </span>
+        </div>
+
+        <!-- PV 유효전력 -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">PV 유효전력</span>
+            <span class="font-semibold text-gray-900">
+                <span th:text="${pcsSummary.pvActivePowerKw}">0.00</span>
+                <span class="text-sm">kW</span>
+            </span>
+        </div>
+
+        <!-- 충/방전 Reference -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">충/방전 Reference</span>
+            <span class="font-semibold text-gray-900">
+                <span th:text="${pcsSummary.chargeDischargeReferenceKw}">0.00</span>
+                <span class="text-sm">kW</span>
+            </span>
+        </div>
+
+        <!-- PCS 유효전력 -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">PCS 유효전력</span>
+            <span class="font-semibold text-gray-900">
+                <span th:text="${pcsSummary.pcsActivePowerKw}">0.00</span>
+                <span class="text-sm">kW</span>
+            </span>
+        </div>
+
+
+    </div>
+</div>

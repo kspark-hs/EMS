@@ -1,0 +1,135 @@
+<th:block xmlns:th="http://www.thymeleaf.org"
+          th:fragment="content">
+
+    <!-- ===============================
+         Operation History
+    ================================ -->
+
+    <section class="p-6">
+
+        <!-- ===============================
+             상단 필터 영역
+        ================================ -->
+        <div class="flex flex-wrap items-center gap-4 mb-6">
+            <!-- 날짜 선택 -->
+            <input type="date" class="border rounded px-3 py-2"/>
+
+            <!-- 설비 선택 -->
+            <select class="border rounded px-3 py-2">
+                <option>전체</option>
+                <option>배터리</option>
+                <option>PCS</option>
+            </select>
+
+            <!-- 기타 드롭다운 -->
+            <select class="border rounded px-3 py-2">
+                <option>전체</option>
+            </select>
+
+            <!-- 조회 -->
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                조회
+            </button>
+
+            <!-- 엑셀 다운로드 -->
+            <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                엑셀다운
+            </button>
+        </div>
+
+        <!-- ===============================
+             테이블 영역
+        ================================ -->
+        <div class="overflow-x-auto bg-white rounded shadow">
+            <table class="min-w-full border-collapse border border-gray-200">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th class="border px-4 py-2 text-center">일자</th>
+                    <th class="border px-4 py-2 text-center">시간</th>
+                    <th class="border px-4 py-2 text-center">스테이션</th>
+                    <th class="border px-4 py-2 text-center">설비명</th>
+                    <th class="border px-4 py-2 text-center">운전이력</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:05</td>
+                    <td class="border px-4 py-2 text-center">#1</td>
+                    <td class="border px-4 py-2 text-center">PCS#1</td>
+                    <td class="border px-4 py-2 text-center">
+                        SYSTEM Command Status OFF
+                    </td>
+                </tr>
+
+                <tr class="bg-gray-50">
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">#1</td>
+                    <td class="border px-4 py-2 text-center">배터리 #1</td>
+                    <td class="border px-4 py-2 text-center">Stand-by</td>
+                </tr>
+
+                <tr>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:05:01</td>
+                    <td class="border px-4 py-2 text-center">#1</td>
+                    <td class="border px-4 py-2 text-center">PCS#2</td>
+                    <td class="border px-4 py-2 text-center">Stop</td>
+                </tr>
+
+                <tr class="bg-gray-50">
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">#1</td>
+                    <td class="border px-4 py-2 text-center">배터리 #1</td>
+                    <td class="border px-4 py-2 text-center">방전</td>
+                </tr>
+
+                <tr>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:05:01</td>
+                    <td class="border px-4 py-2 text-center">#1</td>
+                    <td class="border px-4 py-2 text-center">PCS#2</td>
+                    <td class="border px-4 py-2 text-center">Discharge</td>
+                </tr>
+
+                <tr class="bg-gray-50">
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">#1</td>
+                    <td class="border px-4 py-2 text-center">배터리 #1</td>
+                    <td class="border px-4 py-2 text-center">Run</td>
+                </tr>
+
+                <tr>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">#1</td>
+                    <td class="border px-4 py-2 text-center">배터리 #1</td>
+                    <td class="border px-4 py-2 text-center">충전</td>
+                </tr>
+
+                <tr class="bg-gray-50">
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">#1</td>
+                    <td class="border px-4 py-2 text-center">배터리 #1</td>
+                    <td class="border px-4 py-2 text-center">정지</td>
+                </tr>
+
+                <tr>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">#1</td>
+                    <td class="border px-4 py-2 text-center">배터리 #1</td>
+                    <td class="border px-4 py-2 text-center">운전</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+</th:block>

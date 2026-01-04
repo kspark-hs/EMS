@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>배터리</title>
+</head>
+
+<body>
+
+<!-- ================= Content ================= -->
+<div th:fragment="content" class="flex-1 p-6 bg-gray-100 space-y-3">
+
+    <!-- ================= Page Header ================= -->
+    <div th:replace="~{
+        fragment/page/page-header :: pageHeader(
+            '배터리',
+            '모니터링 &nbsp;›&nbsp; 개별운전현황 &nbsp;›&nbsp;
+             <span class=&quot;text-gray-700 font-medium&quot;>배터리</span>',
+            ~{::emptySelector}
+        )
+    }"></div>
+    <div th:fragment="emptySelector"></div>
+
+    <!-- ================= Page Body ================= -->
+    <div class="space-y-6">
+
+        <!-- =================================================
+             상단 상태 카드 (3열)
+        ================================================== -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+            <!-- Battery Summary -->
+            <div th:replace="~{
+                fragment/battery/battery-summary-card
+                :: batterySummaryCard
+            }"></div>
+
+            <!-- Operation Status (fragment) -->
+            <div th:replace="~{
+                fragment/battery/battery-operation-status-card
+                :: batteryOperationStatusCard
+            }"></div>
+
+            <!-- Fault Status -->
+            <div th:replace="~{
+                fragment/battery/battery-fault-status-card
+            }"></div>
+
+        </section>
+
+        <!-- =================================================
+             Rack 상태
+        ================================================== -->
+        <div th:replace="~{
+            fragment/battery/battery-rack-status-table-card
+            :: batteryRackStatusTableCard
+        }"></div>
+
+
+        <!-- ================= 설비 상태 ================= -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 pb-2">
+
+            <!-- 소방설비 -->
+            <div th:replace="~{fragment/equipment/fire-system-card :: fireSystemCard}"></div>
+
+            <!-- 온습도계 -->
+            <div th:replace="~{fragment/equipment/temperature-humidity-card :: temperatureHumidityCard}"></div>
+
+            <!-- 에어컨 -->
+            <div th:replace="~{fragment/equipment/air-conditioner-card :: airConditionerCard}"></div>
+
+        </section>
+
+        <!-- ================= 고장 상세 ================= -->
+        <section class="space-y-4">
+
+            <!-- 배터리 고장정보 -->
+            <div th:replace="~{
+                fragment/battery/battery-fault-detail-card
+                :: batteryFaultDetailCard
+            }"></div>
+
+            <!-- Rack 고장정보 -->
+            <div th:replace="~{
+                fragment/battery/rack-fault-detail-card
+                :: rackFaultDetailCard
+            }"></div>
+
+        </section>
+
+    </div>
+</div>
+
+</body>
+</html>

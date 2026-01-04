@@ -1,0 +1,80 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     th:fragment="temperatureHumidityDetailCard">
+
+    <!-- =========================
+         온습도계 상세 카드
+    ========================= -->
+    <div class="bg-gray-50 rounded-lg border p-3">
+
+        <!-- 카드 헤더 -->
+        <div class="flex items-center gap-2 mb-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-sky-500"></span>
+            <h3 class="text-sm font-semibold text-gray-700">
+                온습도계 상세
+            </h3>
+        </div>
+
+        <!-- =========================
+             Channel 테이블
+        ========================= -->
+        <table class="w-full text-xs border-t border-gray-200">
+
+            <!-- 테이블 헤더 -->
+            <thead>
+            <tr class="text-gray-500 text-center">
+                <th class="py-2 w-12">CH</th>
+                <th class="w-20">상태</th>
+                <th>온도 (℃)</th>
+                <th>습도 (%)</th>
+                <th class="w-20">통신</th>
+            </tr>
+            </thead>
+
+            <!-- 테이블 바디 -->
+            <tbody>
+            <tr th:each="row, stat : ${temperatureHumidityTable.rows}"
+                class="border-t border-gray-200 text-center">
+
+                <!-- CH 번호 -->
+                <td class="py-1 font-medium"
+                    th:text="${stat.index + 1}">
+                    1
+                </td>
+
+                <!-- 상태 -->
+                <td th:text="${row.statusText}"
+                    th:classappend="
+                        ${row.status.name() == 'NORMAL'} ? ' text-green-600'
+                      : (${row.status.name() == 'WARNING'} ? ' text-yellow-600'
+                      : ' text-red-600')">
+                    정상
+                </td>
+
+                <!-- 온도 -->
+                <td th:text="${row.temperature != null
+                               ? @fmt.temp(row.temperature)
+                               : '-'}">
+                    24.8
+                </td>
+
+                <!-- 습도 -->
+                <td th:text="${row.humidity != null
+                               ? @fmt.hum(row.humidity)
+                               : '-'}">
+                    58
+                </td>
+
+                <!-- 통신 상태 -->
+                <td th:text="${row.communicationAlive ? '정상' : '단절'}"
+                    th:classappend="${row.communicationAlive
+                                     ? ' text-green-600'
+                                     : ' text-red-600'}">
+                    정상
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>

@@ -1,0 +1,31 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     th:fragment="fireSystemCard"
+     class="bg-white rounded-xl shadow p-4 min-h-[120px]">
+
+    <!-- 카드 헤더 -->
+    <div class="flex items-center gap-2 pb-2 mb-3 border-b border-gray-200">
+        <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+        <h2 class="font-semibold text-gray-700">소방설비</h2>
+    </div>
+
+    <!-- 카드 본문 -->
+    <div class="space-y-2 text-sm text-gray-700"
+         th:if="${fireSystemTable != null}">
+
+        <div class="flex justify-between">
+
+            <span>화재신호 감지 여부</span>
+
+            <!-- 상태 표시 -->
+            <span class="font-semibold"
+                  th:text="${fireSystemTable.overallStatusText}"
+                  th:classappend="${fireSystemTable.rows[0].status.name() == 'NORMAL'}
+                                  ? ' text-green-600'
+                                  : ' text-red-600'">
+            </span>
+
+        </div>
+
+    </div>
+
+</div>

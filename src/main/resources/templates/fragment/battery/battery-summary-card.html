@@ -1,0 +1,71 @@
+<!-- templates/fragment/battery/battery-summary-card.html -->
+<div th:fragment="batterySummaryCard"
+     class="bg-white rounded-xl shadow p-4 min-h-[180px]">
+
+    <!-- 카드 헤더 -->
+    <div class="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
+        <div class="flex items-center gap-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
+            <h3 class="font-semibold text-gray-800">배터리 요약</h3>
+        </div>
+    </div>
+
+    <!-- 카드 내용 -->
+    <div class="space-y-2 text-sm">
+
+        <!-- 온라인 상태 -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">온라인 상태</span>
+            <span class="font-semibold text-green-600"
+                  th:text="${batterySummary.onlineStatus}">
+                ONLINE
+            </span>
+        </div>
+
+        <!-- 메인 릴레이 -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">메인 릴레이</span>
+            <span class="font-semibold text-green-600"
+                  th:text="${batterySummary.relayStatus}">
+                ON
+            </span>
+        </div>
+
+        <!-- 충/방전 상태 -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">충/방전 상태</span>
+            <span class="font-semibold text-green-600"
+                  th:text="${batterySummary.actionStatus.label}">
+                Ready
+            </span>
+        </div>
+
+        <!-- SOC -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">SOC</span>
+            <span class="font-semibold text-gray-900">
+                <span th:text="${#numbers.formatDecimal(batterySummary.soc, 1, 1)}">67.9</span>
+                <span class="text-sm">%</span>
+            </span>
+        </div>
+
+        <!-- DC 전압 -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">DC 전압</span>
+            <span class="font-semibold text-gray-900">
+                <span th:text="${#numbers.formatDecimal(batterySummary.dcVoltage, 2, 2)}">921.60</span>
+                <span class="text-sm">V</span>
+            </span>
+        </div>
+
+        <!-- DC 전류 -->
+        <div class="flex justify-between">
+            <span class="text-gray-500">DC 전류</span>
+            <span class="font-semibold text-gray-900">
+                <span th:text="${#numbers.formatDecimal(batterySummary.dcCurrent, 2, 2)}">0.00</span>
+                <span class="text-sm">A</span>
+            </span>
+        </div>
+
+    </div>
+</div>

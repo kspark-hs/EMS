@@ -1,0 +1,101 @@
+<th:block xmlns:th="http://www.thymeleaf.org"
+          th:fragment="content">
+
+    <div class="space-y-4">
+
+        <!-- =============================== -->
+        <!-- 검색 영역 -->
+        <!-- =============================== -->
+        <section class="bg-white p-4 rounded shadow border border-gray-300
+                        flex flex-wrap items-center gap-2">
+
+            <select id="selectCriteria"
+                    class="border border-gray-300 px-3 py-2 rounded">
+                <option value="name">발전소명</option>
+                <option value="region">지역</option>
+            </select>
+
+            <input type="text"
+                   id="searchKeyword"
+                   placeholder="검색어 입력"
+                   class="border px-3 py-2 rounded flex-1 min-w-[200px]" />
+
+            <button id="btnSearchPlant"
+                    class="bg-blue-600 text-white px-4 py-2 rounded
+                           hover:bg-blue-500">
+                조회
+            </button>
+        </section>
+
+        <!-- =============================== -->
+        <!-- 발전소 리스트 테이블 -->
+        <!-- =============================== -->
+        <section class="bg-white p-4 rounded shadow border border-gray-300 overflow-x-auto">
+
+            <table class="min-w-full text-sm md:text-base border">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th class="border text-center">발전소명</th>
+                    <th class="border text-center">지역</th>
+                    <th class="border text-center">SOC</th>
+                    <th class="border text-center">PV 발전전력</th>
+                    <th class="border text-center">PCS 출력전력</th>
+                    <th class="border text-center">PCS 상태</th>
+                    <th class="border text-center">배터리 상태</th>
+                </tr>
+                </thead>
+
+                <tbody id="plantTableBody">
+                <tr>
+                    <td class="border px-2">이화산업전력</td>
+                    <td class="border text-center">서울</td>
+                    <td class="border text-center">SOC</td>
+                    <td class="border text-center">PV 발전전력</td>
+                    <td class="border text-center">PCS 출력전력</td>
+                    <td class="border text-center">PCS 상태</td>
+                    <td class="border text-center">배터리 상태</td>
+                </tr>
+                <tr>
+                    <td class="border px-2">단월리</td>
+                    <td class="border text-center">전남</td>
+                    <td class="border text-center">SOC</td>
+                    <td class="border text-center">PV 발전전력</td>
+                    <td class="border text-center">PCS 출력전력</td>
+                    <td class="border text-center">PCS 상태</td>
+                    <td class="border text-center">배터리 상태</td>
+                </tr>
+                <tr>
+                    <td class="border px-2">행정16호</td>
+                    <td class="border text-center">경기</td>
+                    <td class="border text-center">SOC</td>
+                    <td class="border text-center">PV 발전전력</td>
+                    <td class="border text-center">PCS 출력전력</td>
+                    <td class="border text-center">PCS 상태</td>
+                    <td class="border text-center">배터리 상태</td>
+                </tr>
+                <tr>
+                    <td class="border px-2">대광1호</td>
+                    <td class="border text-center">경북</td>
+                    <td class="border text-center">SOC</td>
+                    <td class="border text-center">PV 발전전력</td>
+                    <td class="border text-center">PCS 출력전력</td>
+                    <td class="border text-center">PCS 상태</td>
+                    <td class="border text-center">배터리 상태</td>
+                </tr>
+                <tr>
+                    <td class="border px-2">일조솔라플랜트1호</td>
+                    <td class="border text-center">전남</td>
+                    <td class="border text-center">SOC</td>
+                    <td class="border text-center">PV 발전전력</td>
+                    <td class="border text-center">PCS 출력전력</td>
+                    <td class="border text-center">PCS 상태</td>
+                    <td class="border text-center">배터리 상태</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </section>
+
+    </div>
+
+</th:block>

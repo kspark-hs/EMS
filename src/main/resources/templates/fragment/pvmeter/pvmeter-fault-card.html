@@ -1,0 +1,40 @@
+<div th:fragment="pvmeterFaultCard"
+     class="bg-white rounded-xl shadow p-4 min-h-[180px]">
+
+    <!-- 카드 헤더 -->
+    <div class="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
+        <div class="flex items-center gap-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-red-500"></span>
+            <h3 class="font-semibold text-gray-800">고장 상태</h3>
+        </div>
+    </div>
+
+    <!-- 카드 내용 -->
+    <div class="grid grid-cols-2 gap-y-2 text-sm">
+
+        <div class="text-gray-500">고장 발생</div>
+        <div class="text-right font-semibold text-green-600"
+             th:text="${pvmeterFaultStatus.faultOccurred}">
+            -
+        </div>
+
+        <div class="text-gray-500">내부 통신 상태</div>
+        <div class="text-right font-semibold text-green-600"
+             th:text="${pvmeterFaultStatus.internalCommStatus}">
+            -
+        </div>
+
+        <div class="text-gray-500">외부 통신 상태</div>
+        <div class="text-right font-semibold text-green-600"
+             th:text="${pvmeterFaultStatus.externalCommStatus}">
+            -
+        </div>
+
+        <div class="text-gray-500">인터록 상태</div>
+        <div class="text-right font-semibold text-green-600"
+             th:text="${pvmeterFaultStatus.interlockStatus}">
+            -
+        </div>
+
+    </div>
+</div>

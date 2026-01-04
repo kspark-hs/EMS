@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>EMS</title>
+
+    <style>
+        /* ===============================
+           사이드바 슬라이드 (모바일 + 태블릿)
+           =============================== */
+        @media (max-width: 1024px) {
+            #sidebar-monitoring,
+            #sidebar-admin {
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                z-index: 40;
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+            }
+
+            body.sidebar-open #sidebar-monitoring,
+            body.sidebar-open #sidebar-admin {
+                transform: translateX(0);
+            }
+        }
+
+        /* ===============================
+           관리자 사이드바 메뉴 스크롤 (ADMIN만)
+           =============================== */
+        @media (max-width: 1024px) {
+            /* 관리자 메뉴 스크롤은 Y만 */
+        #sidebar-admin .admin-sidebar-nav {
+            overflow-y: auto;
+            overflow-x: hidden;
+            }
+
+        /* flyout이 떠야 하는 기준 레벨 */
+        #sidebar-admin {
+            overflow: visible;
+            }
+        }
+    </style>
+
+    <!-- ✅ 핵심: CSS 적용 전에 sidebar compact 상태 선적용 (출렁임 제거) -->
+    <script>
+        (function () {
+            try {
+                if (sessionStorage.getItem('sidebarCompact') === 'true') {
+                    document.documentElement.classList.add('sidebar-compact');
+                }
+            } catch (e) {
+                /* sessionStorage 접근 불가 환경 대비 */
+            }
+        })();
+    </script>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="flex flex-col min-h-screen">
+
+<!-- ================= HEADER ================= -->
+<div th:replace="~{fragment/header :: header}"></div>
+
+<!-- ================= CONTENT ================= -->
+<div class="flex flex-1 min-h-0 overflow-hidden">
+
+    <!-- ================= SIDEBAR ================= -->
+    <!-- ✅ sidebar fragment 자체가 <aside> 이므로 wrapper만 유지 -->
+    <div class="flex-shrink-0">
+
+        <!-- ADMIN -->
+        <div sec:authorize="hasRole('ADMIN')"
+             th:replace="~{fragment/sidebar/sidebar-admin :: sidebarAdmin}">
+        </div>
+
+        <!-- USER (MONITORING) -->
+        <div sec:authorize="!hasRole('ADMIN')"
+             th:replace="~{fragment/sidebar/sidebar-monitoring :: sidebarMonitoring}">
+        </div>
+
+    </div>
+
+    <!-- ================= MAIN ================= -->
+    <main class="flex-1 min-h-0 overflow-y-auto bg-gray-100">
+        <th:block th:if="${contentTemplate != null}"
+                  th:replace="${contentTemplate} :: content">
+        </th:block>
+    </main>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+<div th:replace="~{fragment/footer :: footer}"></div>
+
+<!-- ================= FLYOUT ================= -->
+<link rel="stylesheet" th:href="@{/css/sidebar-flyout.css}">
+<script th:src="@{/js/sidebar-flyout.js}" defer></script>
+
+<!-- ✅ LOGIN 직후에만 sidebar 상태 초기화 -->
+<script>
+    (function () {
+        /**
+         * 로그인(/login) → 최초 진입 시에만
+         * compact 상태 초기화
+         */
+        const ref = document.referrer;
+        if (!ref || ref.includes('/login')) {
+            sessionStorage.removeItem('sidebarCompact');
+        }
+    })();
+</script>
+
+<!-- Mobile / Tablet FAB -->
+<button id="sidebarFab"
+        class="fixed bottom-6 right-6 z-50
+               lg:hidden
+               w-14 h-14 rounded-full
+               bg-blue-600 text-white
+               shadow-lg flex items-center justify-center">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+         viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+</button>
+
+<script src="/js/sidebar-fab.js"></script>
+<script src="/js/temperature-humidity.js"></script>
+
+</body>
+</html>

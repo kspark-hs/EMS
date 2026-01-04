@@ -1,0 +1,52 @@
+<!-- =================================================
+     PV 전력량계 요약 카드
+================================================== -->
+<div th:fragment="pvmeterSummaryCard"
+     class="bg-white rounded-xl shadow p-4">
+
+    <!-- 카드 헤더 -->
+    <div class="flex items-center gap-2 pb-2 mb-3 border-b border-gray-200">
+        <span class="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
+        <h3 class="font-semibold text-gray-800">PV 전력량계 요약</h3>
+    </div>
+
+    <!-- 카드 내용 -->
+    <div class="space-y-1 text-sm">
+
+        <!-- 온라인 상태 -->
+        <div class="flex justify-between">
+            <span class="text-gray-600">온라인 상태</span>
+            <span class="font-semibold"
+                  th:text="${pvMeterSummary.onlineStatus}"
+                  th:classappend="${pvMeterSummary.onlineStatus == 'ONLINE'}
+                        ? 'text-green-600'
+                        : 'text-red-600'">
+            </span>
+        </div>
+
+        <!-- 출력전력 -->
+        <div class="flex justify-between">
+            <span class="text-gray-600">출력전력</span>
+            <span class="font-semibold">
+                <span th:text="${pvMeterSummary.activePowerKw}">0.00</span> kW
+            </span>
+        </div>
+
+        <!-- 역률 -->
+        <div class="flex justify-between">
+            <span class="text-gray-600">역률</span>
+            <span class="font-semibold"
+                  th:text="${pvMeterSummary.powerFactor}">
+            </span>
+        </div>
+
+        <!-- 주파수 -->
+        <div class="flex justify-between">
+            <span class="text-gray-600">주파수</span>
+            <span class="font-semibold">
+                <span th:text="${pvMeterSummary.frequencyHz}">0.00</span> Hz
+            </span>
+        </div>
+
+    </div>
+</div>

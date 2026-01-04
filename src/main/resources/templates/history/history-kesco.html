@@ -1,0 +1,148 @@
+<th:block xmlns:th="http://www.thymeleaf.org"
+          th:fragment="content">
+
+    <!-- =============================== -->
+    <!-- OPERATION HISTORY -->
+    <!-- =============================== -->
+    <section class="p-6">
+
+        <!-- =============================== -->
+        <!-- 상단 필터 영역 -->
+        <!-- =============================== -->
+        <div class="flex flex-wrap items-center gap-4 mb-6">
+
+            <!-- 날짜 선택 1 -->
+            <input type="date"
+                   class="border rounded px-3 py-2"/>
+
+            <span>~</span>
+
+            <!-- 날짜 선택 2 -->
+            <input type="date"
+                   class="border rounded px-3 py-2"/>
+
+            <!-- 조회 -->
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                조회
+            </button>
+
+            <!-- 엑셀다운 -->
+            <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                엑셀다운
+            </button>
+        </div>
+
+        <!-- =============================== -->
+        <!-- 테이블 영역 -->
+        <!-- =============================== -->
+        <div class="overflow-x-auto bg-white rounded shadow">
+
+            <table class="min-w-full table-auto border-collapse border border-gray-200">
+
+                <thead class="bg-gray-100">
+                <tr>
+                    <th class="border px-4 py-2 text-center">일자</th>
+                    <th class="border px-4 py-2 text-center">시간대</th>
+                    <th class="border px-4 py-2 text-center">재전송 카운트</th>
+                    <th class="border px-4 py-2 text-center">전송일자</th>
+                    <th class="border px-4 py-2 text-center">전송성공여부</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:05</td>
+                    <td class="border px-4 py-2 text-center">1</td>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">성공</td>
+                </tr>
+
+                <tr class="bg-gray-50">
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">1</td>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">실패</td>
+                </tr>
+
+                <tr>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:05:01</td>
+                    <td class="border px-4 py-2 text-center">1</td>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">재전송</td>
+                </tr>
+
+                <tr class="bg-gray-50">
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">2</td>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">성공</td>
+                </tr>
+
+                <tr>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:05:01</td>
+                    <td class="border px-4 py-2 text-center">1</td>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">실패</td>
+                </tr>
+
+                <tr class="bg-gray-50">
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">3</td>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">재전송</td>
+                </tr>
+
+                <tr>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">1</td>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">System Error</td>
+                </tr>
+
+                <tr class="bg-gray-50">
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">1</td>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">System Error</td>
+                </tr>
+
+                <tr>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">5</td>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">정지</td>
+                </tr>
+
+                <tr class="bg-gray-50">
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">1</td>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">고장</td>
+                </tr>
+
+                <tr>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">10:02:06</td>
+                    <td class="border px-4 py-2 text-center">1</td>
+                    <td class="border px-4 py-2 text-center">2025-11-29</td>
+                    <td class="border px-4 py-2 text-center">고장</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+</th:block>

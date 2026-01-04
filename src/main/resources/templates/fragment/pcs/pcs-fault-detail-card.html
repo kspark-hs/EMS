@@ -1,0 +1,58 @@
+<!-- templates/fragment/pcs/pcs-fault-detail-card.html -->
+<div id="pcs-fault"
+     th:fragment="pcsFaultDetailCard"
+     class="bg-white rounded-xl shadow p-4">
+
+    <!-- 카드 헤더 -->
+    <div class="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
+
+        <div class="flex items-center gap-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-red-500"></span>
+            <h3 class="font-semibold text-gray-800">PCS 고장정보</h3>
+        </div>
+
+        <!-- PCS 선택 (페이지 이동) -->
+        <form method="get" th:action="@{/individual/pcs}">
+            <select name="pcsNo"
+                    class="border rounded px-2 py-1 text-sm bg-white"
+                    onchange="this.form.submit()">
+                <option th:each="no : ${pcsOptions}"
+                        th:value="${no}"
+                        th:text="'PCS #' + ${no}"
+                        th:selected="${no == selectedPcsNo}">
+                </option>
+            </select>
+        </form>
+    </div>
+
+    <!-- 고장 리스트 -->
+    <div class="
+        grid
+        grid-cols-2
+        md:grid-cols-4
+        gap-x-6
+        gap-y-3
+        text-sm
+    ">
+
+        <div th:each="item : ${pcsFaultItems}"
+             class="flex items-center gap-2 min-h-[24px]">
+
+            <!-- 상태 블릿 -->
+            <span class="inline-block w-2 h-2 rounded-full"
+                  th:classappend="${item.fault}
+                        ? 'bg-red-500'
+                        : 'bg-gray-300'">
+            </span>
+
+            <!-- 고장 명칭 -->
+            <span th:text="${item.label}"
+                  class="leading-none"
+                  th:classappend="${item.fault}
+                        ? 'text-red-600 font-semibold'
+                        : 'text-gray-600'">
+            </span>
+        </div>
+
+    </div>
+</div>

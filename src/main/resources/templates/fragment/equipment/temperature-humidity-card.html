@@ -1,0 +1,118 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     th:fragment="temperatureHumidityCard"
+     class="bg-white rounded-xl shadow p-4 min-h-[180px]">
+
+    <!-- =========================
+     카드 헤더
+========================= -->
+    <div class="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
+
+        <!-- 좌측 : 아이콘 + 제목 -->
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+            <h2 class="font-semibold text-gray-700">온습도계</h2>
+        </div>
+
+        <!-- 우측 : 상세 버튼 + Device Select -->
+        <div class="flex items-center gap-2">
+
+            <!-- 🔹 상세 버튼 -->
+            <button type="button"
+                    class="text-xs text-blue-600 border border-blue-300 rounded px-2 py-1 hover:bg-blue-50"
+                    onclick="toggleTemperatureHumidityDetail(this)">
+                상세
+            </button>
+
+            <!-- 🔹 온습도계 Device 선택 -->
+            <form method="get" th:action="@{/individual/battery}">
+                <select name="sensorNo"
+                        class="text-xs border border-gray-300 rounded px-2 py-1
+                           focus:outline-none focus:ring-1 focus:ring-blue-400"
+                        onchange="this.form.submit()">
+
+                    <option th:each="no : ${temperatureHumiditySensorOptions}"
+                            th:value="${no}"
+                            th:text="'온습도계 #' + ${no}"
+                            th:selected="${no == selectedSensorNo}">
+                    </option>
+
+                </select>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- =========================
+         카드 본문 (대표 센서 = rows[0])
+    ========================= -->
+    <div class="text-sm text-gray-700"
+         th:if="${temperatureHumidityTable != null}">
+
+
+    <!-- 상태 -->
+        <div class="flex justify-between py-1">
+            <span>상태</span>
+            <span class="font-semibold"
+                  th:text="${temperatureHumidityTable.overallStatusText}"
+                  th:classappend="${temperatureHumidityTable.overallStatus.name() == 'NORMAL'}
+                        ? ' text-green-600'
+                        : ' text-red-600'">
+            </span>
+        </div>
+
+        <!-- 온도 (대표 센서 기준) -->
+        <div class="flex justify-between py-1">
+            <span>온도</span>
+            <span>
+                <span class="font-semibold"
+                      th:text="${@fmt.temp(temperatureHumidityTable.tempMax)}">25.0</span> ℃
+            </span>
+        </div>
+
+        <!-- 습도 (대표 센서 기준) -->
+        <div class="flex justify-between py-1">
+            <span>습도</span>
+            <span>
+                <span class="font-semibold"
+                      th:text="${@fmt.hum(temperatureHumidityTable.humidityMax)}">60.0</span> %
+            </span>
+        </div>
+
+        <!-- 충방전 가능 여부 -->
+        <div class="py-1">
+            <span class="font-semibold"
+                  th:text="${temperatureHumidityTable.operableText}"
+                  th:classappend="${temperatureHumidityTable.operable}
+                        ? ' text-green-600'
+                        : ' text-red-600'">
+            </span>
+        </div>
+
+        <!-- 기준 문구 -->
+        <div class="pt-1 text-xs text-gray-400">
+            (기준:
+            온도
+            <span th:text="${@fmt.temp(temperatureHumidityTable.기준온도Min)}"></span>
+            ~
+            <span th:text="${@fmt.temp(temperatureHumidityTable.기준온도Max)}"></span>
+            ℃
+            /
+            습도 ≤
+            <span th:text="${temperatureHumidityTable.기준습도Max}"></span>
+            %
+            )
+        </div>
+    </div>
+
+    <!-- =========================
+     온습도계 상세 (초기 숨김)
+    ========================= -->
+    <div class="temperature-humidity-detail hidden mt-3">
+        <div th:replace="~{
+            fragment/equipment/temperature-humidity-detail-card
+            :: temperatureHumidityDetailCard
+        }"></div>
+    </div>
+
+</div>
+

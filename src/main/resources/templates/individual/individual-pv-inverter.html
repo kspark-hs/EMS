@@ -1,0 +1,118 @@
+<th:block xmlns:th="http://www.thymeleaf.org"
+          th:fragment="content">
+
+    <!-- =============================== -->
+    <!-- GRID -->
+    <!-- =============================== -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- =============================== -->
+        <!-- 1. 현재 발전량 -->
+        <!-- =============================== -->
+        <section class="bg-white p-4 rounded shadow border border-gray-300">
+            <h3 class="text-lg font-semibold mb-4">현재 발전량</h3>
+
+            <table class="min-w-full text-sm md:text-base">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th class="text-center">구분</th>
+                    <th colspan="2" class="text-center">용량</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr><td>입력전력</td><td class="text-right">값</td><td>kW</td></tr>
+                <tr><td>출력전력</td><td class="text-right">-</td><td>kW</td></tr>
+                <tr><td>일간발전량</td><td class="text-right">-</td><td>kWh</td></tr>
+                <tr><td>일간발전시간</td><td class="text-right">-</td><td>hr</td></tr>
+                <tr><td>전월발전량</td><td class="text-right">-</td><td>MWh</td></tr>
+                <tr><td>당월발전량</td><td class="text-right">-</td><td>MWh</td></tr>
+                <tr><td>누적발전량</td><td class="text-right">-</td><td>GWh</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- =============================== -->
+        <!-- 2. 태양광 인버터 상세정보 -->
+        <!-- =============================== -->
+        <section class="bg-white p-4 rounded shadow border border-gray-300">
+            <h3 class="text-lg font-semibold mb-4">태양광 인버터 상세정보</h3>
+
+            <h4 class="font-semibold mb-2">인버터 상태</h4>
+            <table class="min-w-full text-sm md:text-base mb-4">
+                <tr><td>팬 누적 운전일</td><td class="text-right">350</td><td>일</td></tr>
+                <tr><td>상태</td><td colspan="2" class="text-center">운전</td></tr>
+            </table>
+
+            <h4 class="font-semibold mb-2">인버터 DC</h4>
+            <table class="min-w-full text-sm md:text-base">
+                <tr><td>입력전압</td><td class="text-right">300.25</td><td>V</td></tr>
+                <tr><td>입력전류</td><td class="text-right">100</td><td>A</td></tr>
+                <tr><td>입력전력</td><td class="text-right">400.18</td><td>kW</td></tr>
+            </table>
+        </section>
+
+        <!-- =============================== -->
+        <!-- 3. 고장정보 -->
+        <!-- =============================== -->
+        <section class="bg-white p-4 rounded shadow border border-gray-300 md:col-span-2">
+            <h3 class="text-lg font-semibold mb-4">고장정보</h3>
+            <table class="min-w-full text-sm md:text-base">
+                <tr>
+                    <td class="text-center"><div class="bullet-green"></div></td><td>문열림 + 비상정지</td>
+                    <td class="text-center"><div class="bullet-green"></div></td><td>입력 저전압</td>
+                </tr>
+                <tr>
+                    <td class="text-center"><div class="bullet-green"></div></td><td>AC 차단기(Q2) 열림</td>
+                    <td class="text-center"><div class="bullet-green"></div></td><td>입력 과전류</td>
+                </tr>
+                <tr>
+                    <td class="text-center"><div class="bullet-green"></div></td><td>DC 차단기(Q1) 열림</td>
+                    <td class="text-center"><div class="bullet-green"></div></td><td>출력 과전압</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- =============================== -->
+        <!-- 4. 인버터 AC -->
+        <!-- =============================== -->
+        <section class="bg-white p-4 rounded shadow border border-gray-300 md:col-span-2">
+            <h3 class="text-lg font-semibold mb-4">인버터 AC</h3>
+            <table class="min-w-full text-sm md:text-base">
+                <tr><td>RS 선간전압</td><td class="text-right">20.3</td><td>V</td><td>역률</td><td class="text-right">0.98</td><td></td></tr>
+                <tr><td>ST 선간전압</td><td class="text-right">-</td><td>V</td><td>주파수</td><td class="text-right">60.0</td><td>Hz</td></tr>
+                <tr><td>출력 전력</td><td class="text-right">-</td><td>kW</td><td>총 누적 발전량</td><td class="text-right">-</td><td>MWh</td></tr>
+            </table>
+        </section>
+
+        <!-- =============================== -->
+        <!-- 5. 태양광 인버터 목록 -->
+        <!-- =============================== -->
+        <section class="bg-white p-4 rounded shadow border border-gray-300 md:col-span-2">
+            <h3 class="text-lg font-semibold mb-4">태양광 인버터</h3>
+            <table class="min-w-full text-sm md:text-base">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th>번호</th><th>이름</th><th>상태</th><th colspan="2">출력전력</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr><td class="text-center">1</td><td class="text-center">인버터1</td><td class="text-center">정상</td><td class="text-right">-</td><td>kW</td></tr>
+                <tr><td class="text-center">2</td><td class="text-center">인버터2</td><td class="text-center">정상</td><td class="text-right">-</td><td>kW</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <!-- 고장 표시 스크립트 -->
+    <script>
+        const faultIndexes = [0, 2];
+        document.querySelectorAll('.bullet-green').forEach((b, i) => {
+            if (faultIndexes.includes(i)) {
+                b.classList.remove('bullet-green');
+                b.classList.add('bullet-red');
+            }
+        });
+    </script>
+
+</th:block>

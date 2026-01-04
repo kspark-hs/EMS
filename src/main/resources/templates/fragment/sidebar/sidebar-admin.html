@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<aside id="sidebar-admin"
+       th:fragment="sidebarAdmin"
+       class="relative w-56 bg-white border-r border-gray-200
+              flex flex-col flex-shrink-0 transition-all duration-200">
+
+    <!-- ================= MENU ================= -->
+    <nav class="flex-1 min-h-0 py-4 text-gray-800 text-sm
+            admin-sidebar-nav">
+
+        <!-- ================= 통합발전현황 ================= -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenuAdmin('dashboard')">
+                <span class="menu-left">
+                    <!-- Dashboard Icon -->
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="16" rx="2"/>
+                        <rect x="4.5" y="5.5" width="7" height="6" rx="1"/>
+                        <rect x="13.5" y="5.5" width="5.5" height="4" rx="1"/>
+                        <rect x="4.5" y="12.5" width="5.5" height="6" rx="1"/>
+                        <rect x="13.5" y="11" width="5.5" height="7.5" rx="1"/>
+                    </svg>
+                    통합발전현황
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+            <div id="menu-dashboard" class="menu-sub">
+                <a th:href="@{/admin}" class="menu-sub-item">대시보드</a>
+            </div>
+        </div>
+
+
+        <!-- ================= 발전소 관리 ================= -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenuAdmin('management')">
+                <span class="menu-left">
+                    <!-- Folder / Facility Icon -->
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                        <path d="M3 7h6l2 2h10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/>
+                    </svg>
+                    발전소 관리
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+
+            <div id="menu-management" class="menu-sub">
+                <a th:href="@{/admin/management/member}" class="menu-sub-item">회원 관리</a>
+                <a th:href="@{/admin/management/plant}" class="menu-sub-item">발전소 등록</a>
+                <a th:href="@{/admin/management/info}" class="menu-sub-item">발전소 정보</a>
+            </div>
+        </div>
+
+
+        <!-- ================= 통계 / 리포트 ================= -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenuAdmin('detail')">
+                <span class="menu-left">
+                    <!-- Chart / Report Icon -->
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                      <path d="M3 3v18h18"/>
+                      <rect x="7" y="10" width="3" height="7"/>
+                      <rect x="12" y="6" width="3" height="11"/>
+                      <rect x="17" y="12" width="3" height="5"/>
+                    </svg>
+                    통계 / 리포트
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+
+            <div id="menu-detail" class="menu-sub">
+                <a th:href="@{/admin/detail/pv-inverter}" class="menu-sub-item">태양광 인버터</a>
+                <a th:href="@{/admin/detail/battery}" class="menu-sub-item">배터리</a>
+                <a th:href="@{/admin/detail/battery-rack}" class="menu-sub-item">배터리 랙</a>
+                <a th:href="@{/admin/detail/pcs}" class="menu-sub-item">PCS</a>
+                <a th:href="@{/admin/detail/pv-power-meter}" class="menu-sub-item">PV 전력량계</a>
+                <a th:href="@{/admin/detail/environment-module}" class="menu-sub-item">환경모듈</a>
+                <a th:href="@{/admin/detail/drive-detail}" class="menu-sub-item">운전상세이력</a>
+                <a th:href="@{/admin/detail/fault-detail}" class="menu-sub-item">고장상세이력</a>
+            </div>
+        </div>
+
+
+        <!-- ================= 기본 설정 ================= -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenuAdmin('setting-basic')">
+                <span class="menu-left">
+                    <!-- Settings Gear Icon -->
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                      <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 6.04 4.3l.06.06c.46.46 1.12.6 1.82.33A1.65 1.65 0 0 0 9 3.18V3a2 2 0 1 1 4 0v.18c0 .69.39 1.31 1 1.51.7.27 1.36.13 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.46.46-.6 1.12-.33 1.82.27.7.83 1.09 1.51 1H21a2 2 0 1 1 0 4h-.09c-.69 0-1.31.39-1.51 1z"/>
+                    </svg>
+                    기본 설정
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+
+            <div id="menu-setting-basic" class="menu-sub">
+                <a th:href="@{/admin/setting/basic/setting-info}" class="menu-sub-item">발전소 설치정보</a>
+                <a th:href="@{/admin/setting/basic/basic-drive}" class="menu-sub-item">기본 운전 설정</a>
+                <a th:href="@{/admin/setting/basic/capacity}" class="menu-sub-item">발전 용량 설정</a>
+            </div>
+        </div>
+
+
+        <!-- ================= 배터리 설정 ================= -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenuAdmin('battery')">
+                <span class="menu-left">
+                    <!-- Battery Icon -->
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                        <rect x="3" y="7" width="18" height="10" rx="2"/>
+                        <rect x="10" y="3" width="4" height="2" rx="1"/>
+                    </svg>
+                    배터리 설정
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+
+            <div id="menu-battery" class="menu-sub">
+                <a th:href="@{/admin/setting/battery/charge-discharge-drive}" class="menu-sub-item">충/방전 운전</a>
+                <a th:href="@{/admin/setting/battery/bat-fault}" class="menu-sub-item">배터리 고장</a>
+                <a th:href="@{/admin/setting/battery/bat-drive-condition}" class="menu-sub-item">배터리 운전조건</a>
+                <a th:href="@{/admin/setting/battery/charge-discharge-power}" class="menu-sub-item">충/방전 전력제한</a>
+                <a th:href="@{/admin/setting/battery/bat-relay}" class="menu-sub-item">배터리 릴레이</a>
+                <a th:href="@{/admin/setting/battery/bat-room-temp-humidity}" class="menu-sub-item">배터리 룸 온/습도</a>
+            </div>
+        </div>
+
+
+        <!-- ================= 스케줄 설정 ================= -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenuAdmin('schedule')">
+                <span class="menu-left">
+                    <!-- Calendar Icon -->
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                      <rect x="3" y="4" width="18" height="18" rx="2"/>
+                      <path d="M16 2v4M8 2v4M3 10h18"/>
+                    </svg>
+                    충/방전 스케줄
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+
+            <div id="menu-schedule" class="menu-sub">
+                <a th:href="@{/admin/setting/schedule/charge-discharge-schedule}" class="menu-sub-item">
+                    충/방전 스케줄
+                </a>
+            </div>
+        </div>
+
+
+        <!-- ================= PCS 설정 ================= -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenuAdmin('pcs')">
+                <span class="menu-left">
+                    <!-- PCS / Power Icon -->
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                      <rect x="3" y="3" width="18" height="18" rx="3"/>
+                      <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                    PCS 설정
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+
+            <div id="menu-pcs" class="menu-sub">
+                <a th:href="@{/admin/setting/pcs/charge-level}" class="menu-sub-item">PCS 충전레벨 제어</a>
+                <a th:href="@{/admin/setting/pcs/discharge-level}" class="menu-sub-item">PCS 방전레벨 제어</a>
+                <a th:href="@{/admin/setting/pcs/pcs-fault}" class="menu-sub-item">PCS 고장</a>
+            </div>
+        </div>
+
+
+
+        <!-- ================= 발전금액 관리 ================= -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenuAdmin('cost')">
+                <span class="menu-left">
+                    <!-- Money / Billing Icon -->
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="9"/>
+                      <path d="M12 7v10M9 9h6M9 15h6"/>
+                    </svg>
+                    발전금액 관리
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+
+            <div id="menu-cost" class="menu-sub">
+                <a th:href="@{/admin/cost/weighting}" class="menu-sub-item">가중치 관리</a>
+                <a th:href="@{/admin/cost/smp}" class="menu-sub-item">SMP 관리</a>
+                <a th:href="@{/admin/cost/rec}" class="menu-sub-item">REC 관리</a>
+            </div>
+        </div>
+
+
+        <!-- ================= 시스템 관리 ================= -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenuAdmin('system')">
+                <span class="menu-left">
+                    <!-- System Window Icon -->
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                      <rect x="3" y="5" width="18" height="14" rx="2"/>
+                      <path d="M3 10h18"/>
+                    </svg>
+                    시스템 관리
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+
+            <div id="menu-system" class="menu-sub">
+                <a th:href="@{/admin/system/common-code}" class="menu-sub-item">공통코드</a>
+                <a th:href="@{/admin/system/program-list}" class="menu-sub-item">프로그램 목록</a>
+                <a th:href="@{/admin/system/program-authority}" class="menu-sub-item">프로그램 권한</a>
+                <a th:href="@{/admin/system/facility-code}" class="menu-sub-item">설비코드</a>
+            </div>
+        </div>
+
+
+        <!-- ================= 긴급 제어 ================= -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenuAdmin('emergency')">
+                <span class="menu-left">
+                    <!-- Warning Triangle Icon -->
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                      <polygon points="12,2 22,20 2,20"/>
+                      <path d="M12 8v5M12 16h.01"/>
+                    </svg>
+                    긴급 제어
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+
+            <div id="menu-emergency" class="menu-sub">
+                <a th:href="@{/admin/emergency/manual-drive-control}" class="menu-sub-item">
+                    수동운전 제어
+                </a>
+                <a th:href="@{/admin/emergency/emergency-control}" class="menu-sub-item">
+                    긴급 제어
+                </a>
+                <a th:href="@{/admin/emergency/rtu-control}" class="menu-sub-item">
+                    RTU 제어
+                </a>
+                <a th:href="@{/admin/emergency/time-sync}" class="menu-sub-item">
+                    시간 동기화
+                </a>
+            </div>
+        </div>
+
+        <!-- ================= 에어컨 설정 ================= -->
+        <div class="menu-group">
+            <button type="button" class="menu-main" onclick="toggleMenuAdmin('aircon')">
+                <span class="menu-left">
+                    <!-- Cooling Fan Icon -->
+                    <svg class="menu-icon" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="2"/>
+                      <path d="M12 4l2 4-2 2-2-2zM12 20l2-4-2-2-2 2zM4 12l4-2 2 2-2 2zM20 12l-4-2-2 2 2 2z"/>
+                    </svg>
+                    에어컨 설정
+                </span>
+                <span class="menu-toggle-icon">
+                    <svg class="toggle-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="5" width="14" height="14" rx="2"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </span>
+            </button>
+
+            <div id="menu-aircon" class="menu-sub">
+                <a th:href="@{/admin/setting/aircon/air-con-schedule}" class="menu-sub-item">에어컨 스케줄</a>
+            </div>
+        </div>
+
+    </nav>
+
+
+    <!-- ================= FOOTER (Compact Toggle) ================= -->
+    <div class="border-t bg-white py-3 flex justify-end px-4">
+        <button type="button" onclick="toggleSidebarCompactAdmin()"
+                class="w-9 h-9 flex items-center justify-center
+                       rounded bg-gray-200 hover:bg-gray-300">
+            <svg id="sidebarAdminToggleIcon"
+                 class="w-4 h-4 text-gray-700 transition-transform"
+                 viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 6l-6 6 6 6"/>
+            </svg>
+        </button>
+    </div>
+
+
+    <!-- ================= STYLE ================= -->
+    <style>
+        .menu-group { margin-top: 4px; position: relative; }
+        .menu-main {
+            width: 100%;
+            padding: 12px 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: white; cursor: pointer; font-weight: 600;
+        }
+        .menu-main:hover { background: #f1f5f9; }
+        .menu-left { display: flex; align-items: center; gap: 12px; }
+        .menu-icon { width: 18px; height: 18px; fill: #111; }
+        .menu-sub {
+            display: none;
+            background: #f8fafc;
+            border-left: 2px solid #e5e7eb;
+            margin-left: 46px;
+            padding: 4px 0;
+        }
+        .menu-sub-item {
+            display: block;
+            padding: 8px 16px;
+            color: #333; text-decoration: none;
+        }
+        .menu-sub-item:hover { background: #e5e7eb; }
+
+        /* ===== Compact Mode ===== */
+        html.sidebar-compact-admin #sidebar-admin,
+        #sidebar-admin.compact {
+            width: 64px !important;
+        }
+        html.sidebar-compact-admin .menu-left { font-size: 0; }
+        html.sidebar-compact-admin .menu-toggle-icon { display: none; }
+        html.sidebar-compact-admin .menu-sub {
+            position: absolute; left: 64px; top: 0;
+            margin-left: 0; min-width: 180px;
+            background: #374151; color: white;
+            border-radius: 8px; z-index: 100;
+        }
+        html.sidebar-compact-admin .menu-sub-item { color: #fff; }
+        html.sidebar-compact-admin .menu-sub-item:hover {
+            background: rgba(255,255,255,0.15);
+        }
+    </style>
+
+
+    <!-- ================= SCRIPT ================= -->
+    <script>
+        let adminOpened = null;
+
+        function toggleMenuAdmin(id) {
+            const sidebar = document.getElementById('sidebar-admin');
+            const isCompact = sidebar.classList.contains('compact');
+
+            // ✅ compact 상태면 → 먼저 sidebar 확장
+            if (isCompact) {
+                sidebar.classList.remove('compact');
+                document.documentElement.classList.remove('sidebar-compact-admin');
+                sessionStorage.setItem('sidebarAdminCompact', 'false');
+            }
+
+            // 기존 열린 메뉴 닫기
+            document.querySelectorAll('#sidebar-admin .menu-sub')
+                    .forEach(m => m.style.display = 'none');
+
+            if (adminOpened === id) {
+                adminOpened = null;
+                sessionStorage.removeItem('adminOpened');
+                return;
+            }
+
+            const menu = document.getElementById('menu-' + id);
+            if (!menu) return;
+
+            menu.style.display = 'block';
+            adminOpened = id;
+            sessionStorage.setItem('adminOpened', id);
+        }
+
+        function restoreAdminMenu() {
+            const id = sessionStorage.getItem('adminOpened');
+            if (!id) return;
+
+            const menu = document.getElementById('menu-' + id);
+            if (menu) menu.style.display = 'block';
+        }
+
+        function toggleSidebarCompactAdmin() {
+            const sidebar = document.getElementById('sidebar-admin');
+            const icon = document.getElementById('sidebarAdminToggleIcon');
+
+            const compact = !sidebar.classList.contains('compact');
+
+            sidebar.classList.toggle('compact', compact);
+            document.documentElement.classList.toggle('sidebar-compact-admin', compact);
+            icon.style.transform = compact ? 'rotate(180deg)' : 'rotate(0deg)';
+
+            sessionStorage.setItem('sidebarAdminCompact', compact);
+
+            document.querySelectorAll('#sidebar-admin .menu-sub')
+                    .forEach(m => m.style.display = 'none');
+
+            if (!compact) restoreAdminMenu();
+        }
+
+        (function initAdmin() {
+            const compactSaved = sessionStorage.getItem('sidebarAdminCompact') === 'true';
+            const sidebar = document.getElementById('sidebar-admin');
+
+            if (compactSaved) {
+                sidebar.classList.add('compact');
+                document.documentElement.classList.add('sidebar-compact-admin');
+            }
+
+            restoreAdminMenu();
+        })();
+    </script>
+
+
+</aside>
+</html>

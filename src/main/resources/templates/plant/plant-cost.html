@@ -1,0 +1,102 @@
+<th:block xmlns:th="http://www.thymeleaf.org"
+          th:fragment="content">
+
+    <div class="space-y-6">
+
+        <!-- =============================== -->
+        <!-- REC 가중치 -->
+        <!-- =============================== -->
+        <section class="bg-white p-4 rounded shadow border border-gray-300">
+            <h2 class="text-lg font-semibold mb-4">REC 가중치</h2>
+
+            <table class="min-w-full text-sm md:text-base border">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th class="border text-center">구분</th>
+                    <th class="border text-center">소규모 (100kW 미만)</th>
+                    <th class="border text-center">중규모 (100kW ~ 3MW)</th>
+                    <th class="border text-center">대규모 (3MW 초과)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="border">건축물</td>
+                    <td class="border text-center">값</td>
+                    <td class="border text-center">값</td>
+                    <td class="border text-center">값</td>
+                </tr>
+                <tr>
+                    <td class="border">태양광 가중치</td>
+                    <td class="border text-center">값</td>
+                    <td class="border text-center">값</td>
+                    <td class="border text-center">값</td>
+                </tr>
+                <tr>
+                    <td class="border">PCS</td>
+                    <td class="border text-center">값</td>
+                    <td class="border text-center">값</td>
+                    <td class="border text-center">값</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- =============================== -->
+        <!-- SMP / REC 금액 -->
+        <!-- =============================== -->
+        <section class="bg-white p-4 rounded shadow border border-gray-300">
+            <h2 class="text-lg font-semibold mb-4">SMP / REC 금액</h2>
+
+            <table class="min-w-full text-sm md:text-base border">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th class="border text-center">구분</th>
+                    <th class="border text-center">SMP</th>
+                    <th class="border text-center">REC</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="border">현재가</td>
+                    <td class="border text-center">값</td>
+                    <td class="border text-center">값</td>
+                </tr>
+                <tr>
+                    <td class="border">최저가</td>
+                    <td class="border text-center">값</td>
+                    <td class="border text-center">값</td>
+                </tr>
+                <tr>
+                    <td class="border">최고가</td>
+                    <td class="border text-center">값</td>
+                    <td class="border text-center">값</td>
+                </tr>
+                <tr>
+                    <td class="border">평균가</td>
+                    <td class="border text-center">값</td>
+                    <td class="border text-center">값</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- =============================== -->
+        <!-- 발전금액 그래프 -->
+        <!-- =============================== -->
+        <section class="bg-white p-4 rounded shadow border border-gray-300">
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+                <input type="date" class="border px-3 py-2 rounded"/>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500">조회</button>
+                <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-500">엑셀다운</button>
+
+                <div class="flex-1 text-center font-bold text-lg">
+                    일간발전금액 245,000원
+                </div>
+            </div>
+
+            <canvas id="generationCostChart" class="w-full h-64"></canvas>
+        </section>
+
+    </div>
+
+</th:block>

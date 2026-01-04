@@ -1,0 +1,49 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     th:fragment="content"
+     class="flex-1 p-8 bg-gray-100">
+
+    <!-- Flow Diagram -->
+    <section class="bg-white p-6 rounded shadow-lg mb-8 border border-gray-400">
+        <h2 class="text-lg font-semibold mb-2">계통도</h2>
+        <div class="h-48 flex items-center justify-center bg-white rounded">
+            Flow Diagram
+        </div>
+    </section>
+
+    <!-- 요약 카드 영역 -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div class="bg-white p-4 rounded shadow-lg text-center border border-gray-400">
+            <h2 class="text-gray-500">발전용량</h2>
+            <p class="text-2xl font-bold mt-2" id="dailyGeneration">0 kWh</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow-lg text-center border border-gray-400">
+            <h2 class="text-gray-500">발전시간</h2>
+            <p class="text-2xl font-bold mt-2" id="dailyHour">3.5 hr</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow-lg text-center border border-gray-400">
+            <h2 class="text-gray-500">날씨</h2>
+            <p class="text-2xl font-bold mt-2" id="dailyWeather">맑음 온도 20℃ 습도 40%</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow-lg text-center border border-gray-400">
+            <h2 class="text-gray-500">Co2 저감량</h2>
+            <p class="text-2xl font-bold mt-2" id="dailyReduction">1,054.53 Ton</p>
+        </div>
+    </div>
+
+    <!-- 개별 그래프 -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded shadow-lg text-center border border-gray-400">
+            <h2 class="text-gray-500">태양광 인버터</h2>
+        </div>
+        <div class="bg-white p-4 rounded shadow-lg text-center border border-gray-400">
+            <h2 class="text-gray-500">PCS</h2>
+        </div>
+        <div class="bg-white p-4 rounded shadow-lg text-center border border-gray-400">
+            <h2 class="text-gray-500">배터리</h2>
+        </div>
+        <div class="bg-white p-4 rounded shadow-lg text-center border border-gray-400">
+            <h2 class="text-gray-500">계통</h2>
+        </div>
+    </div>
+
+</div>

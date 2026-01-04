@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<!-- ================= Content ================= -->
+<div th:fragment="content"
+     class="flex-1 p-6 bg-gray-100 space-y-4">
+
+    <!-- ================= Page Header ================= -->
+    <div th:replace="~{
+    fragment/page/page-header :: pageHeader(
+        'PV 전력량계',
+        '모니터링 &nbsp;›&nbsp; 개별운전현황 &nbsp;›&nbsp; <b>PV 전력량계</b>',
+        ~{fragment/page/page-header :: emptySelector}
+        )
+    }"></div>
+
+
+    <!-- ================= Main Content ================= -->
+
+    <!-- 🔹 상단 1단 : 요약 / 운전 / 고장 -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <div th:replace="~{fragment/pvmeter/pvmeter-summary-card :: pvmeterSummaryCard}"></div>
+
+        <div th:replace="~{fragment/pvmeter/pvmeter-operation-card :: pvmeterOperationCard}"></div>
+
+        <div th:replace="~{fragment/pvmeter/pvmeter-fault-card :: pvmeterFaultCard}"></div>
+
+    </div>
+
+    <!-- 🔹 상단 2단 : 상태 카드 -->
+    <div class="grid grid-cols-1 gap-4">
+        <div th:replace="~{fragment/pvmeter/pvmeter-status-card :: pvmeterStatusCard}"></div>
+    </div>
+
+    <div th:replace="~{fragment/pvmeter/pvmeter-detail-card :: pvmeterDetailCard}"></div>
+
+
+</div>
+
+</body>
+</html>

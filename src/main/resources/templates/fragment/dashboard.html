@@ -1,0 +1,41 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     th:fragment="content"
+     class="flex-1 bg-gray-100">
+
+    <!-- Flow Diagram -->
+    <section class="bg-white p-6 rounded shadow-lg mb-6 border border-gray-300">
+        <h2 class="text-lg font-semibold mb-2">계통도</h2>
+        <div class="h-48 flex items-center justify-center bg-white rounded">
+            Flow Diagram
+        </div>
+    </section>
+
+    <!-- 요약 카드 영역 -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white p-4 rounded shadow border border-gray-300 text-center">
+            <h2 class="text-gray-500">발전용량</h2>
+            <p class="text-2xl font-bold mt-2">0 kWh</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow border border-gray-300 text-center">
+            <h2 class="text-gray-500">발전시간</h2>
+            <p class="text-2xl font-bold mt-2">3.5 hr</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow border border-gray-300 text-center">
+            <h2 class="text-gray-500">날씨</h2>
+            <p class="text-2xl font-bold mt-2">맑음 20℃ / 40%</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow border border-gray-300 text-center">
+            <h2 class="text-gray-500">CO₂ 저감량</h2>
+            <p class="text-2xl font-bold mt-2">1,054.53 Ton</p>
+        </div>
+    </div>
+
+    <!-- 개별 그래프 -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 pb-6">
+        <div class="bg-white p-4 rounded shadow border border-gray-300 text-center">태양광 인버터</div>
+        <div class="bg-white p-4 rounded shadow border border-gray-300 text-center">PCS</div>
+        <div class="bg-white p-4 rounded shadow border border-gray-300 text-center">배터리</div>
+        <div class="bg-white p-4 rounded shadow border border-gray-300 text-center">계통</div>
+    </div>
+
+</div>

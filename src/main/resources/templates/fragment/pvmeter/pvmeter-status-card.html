@@ -1,0 +1,144 @@
+<!-- =========================
+     PV 전력량계 상태 카드
+========================= -->
+<div th:fragment="pvmeterStatusCard"
+     class="bg-white rounded-xl shadow p-4 md:col-span-3">
+
+    <!-- 카드 헤더 -->
+    <div class="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
+        <div class="flex items-center gap-2 font-semibold">
+            <span class="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
+            <h3 class="text-base font-semibold text-gray-800">PV 전력량계 상태</h3>
+        </div>
+        <div class="text-sm text-gray-500">
+            <span th:text="${#lists.size(pvMeterStatusList)}">1</span> /
+            <span th:text="${#lists.size(pvMeterStatusList)}">1</span>
+        </div>
+    </div>
+
+    <!-- ================= PC / 태블릿 ================= -->
+    <div class="hidden md:block">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="text-gray-600">
+                <tr class="border-b">
+                    <th class="text-left py-2 pr-3 whitespace-nowrap">PV</th>
+                    <th class="text-left py-2 pr-3 whitespace-nowrap">상태</th>
+                    <th class="text-left py-2 pr-3 whitespace-nowrap">마지막 데이터 수신</th>
+                    <th class="text-right py-2 pr-3 whitespace-nowrap">수신주기</th>
+                    <th class="text-right py-2 pr-3 whitespace-nowrap">출력전력</th>
+                    <th class="text-right py-2 pr-3 whitespace-nowrap">유효전력</th>
+                    <th class="text-right py-2 pr-3 whitespace-nowrap">주파수</th>
+                </tr>
+                </thead>
+
+                <tbody class="text-gray-900">
+                <tr th:each="m : ${pvMeterStatusList}"
+                    class="border-b last:border-0">
+
+                    <!-- PV -->
+                    <td class="py-2 pr-3 font-medium whitespace-nowrap"
+                        th:text="${m.meterName}">#1</td>
+
+                    <!-- 상태 -->
+                    <td class="py-2 pr-3 font-semibold whitespace-nowrap"
+                        th:classappend="
+                            ${m.status} == 'NORMAL' ? ' text-green-600' :
+                            (${m.status} == 'FAULT' ? ' text-red-600' : ' text-gray-400')"
+                        th:text="${m.status}">NORMAL</td>
+
+                    <!-- 마지막 데이터 수신 -->
+                    <td class="py-2 pr-3 text-gray-500 whitespace-nowrap"
+                        th:text="${m.lastReceivedAt}">
+                        2025-12-29 08:42:34
+                    </td>
+
+                    <!-- 수신주기 -->
+                    <td class="py-2 pr-3 text-right whitespace-nowrap">
+                        <span th:text="${m.receiveIntervalMs}">200</span>
+                        <span class="text-xs text-gray-400 ml-1">ms</span>
+                    </td>
+
+                    <!-- 출력전력 -->
+                    <td class="py-2 pr-3 text-right whitespace-nowrap">
+                        <span th:text="${#numbers.formatDecimal(m.outputPower, 1, 2)}">32.92</span>
+                        <span class="text-xs text-gray-400 ml-1">kW</span>
+                    </td>
+
+                    <!-- 유효전력 -->
+                    <td class="py-2 pr-3 text-right whitespace-nowrap">
+                        <span th:text="${#numbers.formatDecimal(m.activePower, 1, 2)}">32.80</span>
+                        <span class="text-xs text-gray-400 ml-1">kW</span>
+                    </td>
+
+                    <!-- 주파수 -->
+                    <td class="py-2 pr-3 text-right whitespace-nowrap">
+                        <span th:text="${#numbers.formatDecimal(m.frequency, 1, 2)}">60.03</span>
+                        <span class="text-xs text-gray-400 ml-1">Hz</span>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ================= 모바일 ================= -->
+    <div class="md:hidden space-y-3">
+
+        <div th:each="m : ${pvMeterStatusList}"
+             class="border rounded-lg p-3">
+
+            <!-- 상단 -->
+            <div class="flex justify-between items-center mb-2">
+                <span class="font-semibold" th:text="${m.meterName}">#1</span>
+                <span class="text-sm font-semibold"
+                      th:classappend="
+                        ${m.status} == 'NORMAL' ? ' text-green-600' :
+                        (${m.status} == 'FAULT' ? ' text-red-600' : ' text-gray-400')"
+                      th:text="${m.status}">NORMAL</span>
+            </div>
+
+            <div class="text-sm space-y-1">
+
+                <div class="flex justify-between">
+                    <span class="text-gray-600">마지막 수신</span>
+                    <span class="text-gray-500"
+                          th:text="${m.lastReceivedAt}">
+                        2025-12-29 08:42:34
+                    </span>
+                </div>
+
+                <div class="flex justify-between">
+                    <span class="text-gray-600">수신주기</span>
+                    <span class="font-semibold">
+                        <span th:text="${m.receiveIntervalMs}">200</span> ms
+                    </span>
+                </div>
+
+                <div class="flex justify-between">
+                    <span class="text-gray-600">출력전력</span>
+                    <span class="font-semibold">
+                        <span th:text="${#numbers.formatDecimal(m.outputPower, 1, 2)}">32.92</span> kW
+                    </span>
+                </div>
+
+                <div class="flex justify-between">
+                    <span class="text-gray-600">유효전력</span>
+                    <span class="font-semibold">
+                        <span th:text="${#numbers.formatDecimal(m.activePower, 1, 2)}">32.80</span> kW
+                    </span>
+                </div>
+
+                <div class="flex justify-between">
+                    <span class="text-gray-600">주파수</span>
+                    <span class="font-semibold">
+                        <span th:text="${#numbers.formatDecimal(m.frequency, 1, 2)}">60.03</span> Hz
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

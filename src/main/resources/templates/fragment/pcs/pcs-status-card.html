@@ -1,0 +1,204 @@
+<!-- templates/fragment/pcs/pcs-status-card.html -->
+<div th:fragment="pcsStatusCard"
+     class="bg-white rounded-xl shadow p-4 md:col-span-3">
+
+    <!-- 카드 헤더 -->
+    <div class="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
+        <div class="flex items-center gap-2 font-semibold">
+            <span class="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
+            <h3 class="text-base font-semibold text-gray-800">PCS 상태</h3>
+        </div>
+        <div class="text-sm text-gray-500">
+            <span th:text="${pcsRunningCount}">1</span> /
+            <span th:text="${pcsTotalCount}">2</span>
+        </div>
+    </div>
+
+    <!-- ================= PC / 태블릿 (TABLE) ================= -->
+    <div class="hidden md:block">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="text-gray-600">
+                <tr class="border-b">
+                    <th class="text-left py-2 pr-3 whitespace-nowrap">PCS</th>
+                    <th class="text-left py-2 pr-3 whitespace-nowrap">상태</th>
+
+                    <!-- DC -->
+                    <th class="text-right py-2 pr-3 whitespace-nowrap">DC 전압</th>
+                    <th class="text-right py-2 pr-3 whitespace-nowrap">DC 전류</th>
+                    <th class="text-right py-2 pr-3 whitespace-nowrap">DC 전력</th>
+
+                    <!-- AC -->
+                    <th class="text-right py-2 pr-3 whitespace-nowrap">AC 선간전압</th>
+                    <th class="text-right py-2 pr-3 whitespace-nowrap">AC 전류</th>
+                    <th class="text-right py-2 pr-3 whitespace-nowrap">유효전력</th>
+                    <th class="text-right py-2 whitespace-nowrap">주파수</th>
+                </tr>
+                </thead>
+
+                <tbody class="text-gray-900">
+                <tr th:each="p : ${pcsList}"
+                    class="border-b last:border-0 cursor-pointer hover:bg-gray-50"
+                    th:classappend="${p.pcsNo} == ${selectedPcsNo}
+                        ? ' bg-blue-50'
+                        : ''"
+                    th:onclick="'location.href=\'/individual/pcs?pcsNo=' + ${p.pcsNo} + '\''">
+
+                    <td class="py-2 pr-3 whitespace-nowrap" th:text="${p.pcsName}">PCS #1</td>
+
+                    <!-- 상태 -->
+                    <td class="py-2 pr-3 whitespace-nowrap font-semibold"
+                        th:classappend="
+                            ${p.status} == 'FAULT'   ? ' text-red-600' :
+                            (${p.status} == 'WARNING' ? ' text-orange-600' : ' text-green-600')
+                        "
+                                            th:text="
+                            ${p.status} == 'FAULT'   ? '고장' :
+                            (${p.status} == 'WARNING' ? '주의' : '정상')
+                        ">
+                        정상
+                    </td>
+
+                    <!-- DC -->
+                    <td class="py-2 pr-3 text-right whitespace-nowrap">
+                        <span th:text="${#numbers.formatDecimal(p.dcVoltage, 2, 2)}">821.60</span>
+                        <span class="text-xs text-gray-400 ml-1">V</span>
+                    </td>
+                    <td class="py-2 pr-3 text-right whitespace-nowrap">
+                        <span th:text="${#numbers.formatDecimal(p.dcCurrent, 2, 2)}">42.10</span>
+                        <span class="text-xs text-gray-400 ml-1">A</span>
+                    </td>
+                    <td class="py-2 pr-3 text-right whitespace-nowrap">
+                        <span th:text="${#numbers.formatDecimal(p.dcPower, 2, 2)}">0.30</span>
+                        <span class="text-xs text-gray-400 ml-1">kW</span>
+                    </td>
+
+                    <!-- AC -->
+                    <td class="py-2 pr-3 text-right whitespace-nowrap">
+                        <span th:text="${#numbers.formatDecimal(p.acLineVoltage, 2, 2)}">462.50</span>
+                        <span class="text-xs text-gray-400 ml-1">V</span>
+                    </td>
+                    <td class="py-2 pr-3 text-right whitespace-nowrap">
+                        <span th:text="${#numbers.formatDecimal(p.acCurrent, 2, 2)}">24.00</span>
+                        <span class="text-xs text-gray-400 ml-1">A</span>
+                    </td>
+                    <td class="py-2 pr-3 text-right whitespace-nowrap">
+                        <span th:text="${#numbers.formatDecimal(p.activePower, 2, 2)}">0.00</span>
+                        <span class="text-xs text-gray-400 ml-1">kW</span>
+                    </td>
+                    <td class="py-2 text-right whitespace-nowrap">
+                        <span th:text="${p.frequency}">60</span>
+                        <span class="text-xs text-gray-400 ml-1">Hz</span>
+                    </td>
+                </tr>
+
+                <!-- 데이터 없을 때 -->
+                <tr th:if="${pcsList == null || #lists.isEmpty(pcsList)}">
+                    <td colspan="9" class="py-6 text-center text-gray-400">
+                        표시할 PCS가 없습니다.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ================= 모바일 (CARD) ================= -->
+    <div class="md:hidden space-y-3">
+
+        <!-- 데이터 없을 때 -->
+        <div th:if="${pcsList == null || #lists.isEmpty(pcsList)}"
+             class="py-6 text-center text-gray-400 text-sm">
+            표시할 PCS가 없습니다.
+        </div>
+
+        <!-- PCS 카드 반복 -->
+        <div th:each="p : ${pcsList}"
+             class="border rounded-lg p-3 cursor-pointer"
+             th:classappend="${p.pcsNo} == ${selectedPcsNo}
+                ? ' bg-blue-50'
+                : ''"
+             th:onclick="'location.href=\'/individual/pcs?pcsNo=' + ${p.pcsNo} + '\''">
+
+
+            <!-- 상단: 이름 + 상태 -->
+            <div class="flex justify-between items-center mb-2">
+                <span class="font-semibold" th:text="${p.pcsName}">PCS #1</span>
+
+                <span class="text-sm font-semibold flex items-center gap-2"
+                      th:classappend="
+                        ${p.status} == 'FAULT'   ? ' text-red-600' :
+                        (${p.status} == 'WARNING' ? ' text-orange-600' : ' text-green-600')
+                      ">
+                    <span class="inline-block w-2.5 h-2.5 rounded-full"
+                          th:classappend="
+                            ${p.status} == 'FAULT'   ? ' bg-red-500' :
+                            (${p.status} == 'WARNING' ? ' bg-orange-500' : ' bg-green-500')
+                          ">
+                    </span>
+                    <span th:text="
+                        ${p.status} == 'FAULT'   ? '고장' :
+                        (${p.status} == 'WARNING' ? '주의' : '정상')
+                    ">정상</span>
+                </span>
+
+            </div>
+
+            <!-- 항목 -->
+            <div class="text-sm space-y-1">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">DC 전압</span>
+                    <span class="font-semibold">
+                        <span th:text="${#numbers.formatDecimal(p.dcVoltage, 2, 2)}">821.60</span>
+                        <span class="text-xs text-gray-400 ml-1">V</span>
+                    </span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">DC 전류</span>
+                    <span class="font-semibold">
+                        <span th:text="${#numbers.formatDecimal(p.dcCurrent, 2, 2)}">42.10</span>
+                        <span class="text-xs text-gray-400 ml-1">A</span>
+                    </span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">DC 전력</span>
+                    <span class="font-semibold">
+                        <span th:text="${#numbers.formatDecimal(p.dcPower, 2, 2)}">0.30</span>
+                        <span class="text-xs text-gray-400 ml-1">kW</span>
+                    </span>
+                </div>
+
+                <div class="flex justify-between pt-1">
+                    <span class="text-gray-600">AC 선간전압</span>
+                    <span class="font-semibold">
+                        <span th:text="${#numbers.formatDecimal(p.acLineVoltage, 2, 2)}">462.50</span>
+                        <span class="text-xs text-gray-400 ml-1">V</span>
+                    </span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">AC 전류</span>
+                    <span class="font-semibold">
+                        <span th:text="${#numbers.formatDecimal(p.acCurrent, 2, 2)}">24.00</span>
+                        <span class="text-xs text-gray-400 ml-1">A</span>
+                    </span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">유효전력</span>
+                    <span class="font-semibold">
+                        <span th:text="${#numbers.formatDecimal(p.activePower, 2, 2)}">0.00</span>
+                        <span class="text-xs text-gray-400 ml-1">kW</span>
+                    </span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">주파수</span>
+                    <span class="font-semibold">
+                        <span th:text="${p.frequency}">60</span>
+                        <span class="text-xs text-gray-400 ml-1">Hz</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,167 @@
+<th:block xmlns:th="http://www.thymeleaf.org"
+          th:fragment="content">
+
+    <div class="space-y-6">
+
+        <!-- =============================== -->
+        <!-- 상단 컨트롤 영역 -->
+        <!-- =============================== -->
+        <div class="flex flex-col md:flex-row md:items-center
+                    md:space-x-4 space-y-2 md:space-y-0">
+
+            <input type="date"
+                   id="trendDate"
+                   class="border rounded px-3 py-2" />
+
+            <select id="trendType"
+                    class="border rounded px-3 py-2">
+                <option value="daily">일일 트렌드</option>
+                <option value="monthly">월간 트렌드</option>
+                <option value="yearly">연간 트렌드</option>
+            </select>
+
+            <select id="inverterSelect"
+                    class="border rounded px-3 py-2">
+                <option value="ALL">PCS 전체</option>
+                <option value="PCS1">PCS #1</option>
+            </select>
+
+            <button id="btnView"
+                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                조회
+            </button>
+
+            <button id="btnCharge"
+                    class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-400">
+                충전
+            </button>
+
+            <button id="btnDischarge"
+                    class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-400">
+                방전
+            </button>
+
+            <button id="btnExcel"
+                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                엑셀다운
+            </button>
+        </div>
+
+        <!-- =============================== -->
+        <!-- 요약 카드 -->
+        <!-- =============================== -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded shadow text-center">
+                <h3 class="text-gray-500">일 누적 충전량</h3>
+                <p class="text-2xl font-bold mt-2">149.8 kWh</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow text-center">
+                <h3 class="text-gray-500">일 누적 방전량</h3>
+                <p class="text-2xl font-bold mt-2">134.49 kWh</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow text-center">
+                <h3 class="text-gray-500">ESS 일 누적 발전금액</h3>
+                <p class="text-2xl font-bold mt-2">58,293 원</p>
+            </div>
+        </div>
+
+        <!-- =============================== -->
+        <!-- 그래프 영역 -->
+        <!-- =============================== -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-lg font-semibold mb-2">
+                PCS 충 / 방전 트렌드
+            </h3>
+            <canvas id="pcsTrendChart" height="140"></canvas>
+        </div>
+
+    </div>
+
+    <!-- =============================== -->
+    <!-- Chart Script -->
+    <!-- =============================== -->
+    <script>
+        let pcsTrendChart;
+
+        function renderChart(labels, charge, discharge, yLabel) {
+            const ctx =
+                document.getElementById("pcsTrendChart")
+                        .getContext("2d");
+
+            if (pcsTrendChart) pcsTrendChart.destroy();
+
+            pcsTrendChart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            label: "충전",
+                            data: charge,
+                            borderColor: "#ef4444",
+                            backgroundColor: "rgba(239,68,68,0.25)",
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 0
+                        },
+                        {
+                            label: "방전",
+                            data: discharge,
+                            borderColor: "#f59e0b",
+                            backgroundColor: "rgba(245,158,11,0.25)",
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: "#374151" }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: "#374151" },
+                            grid: { color: "#e5e7eb" }
+                        },
+                        y: {
+                            ticks: { color: "#374151" },
+                            grid: { color: "#e5e7eb" },
+                            title: {
+                                display: true,
+                                text: yLabel,
+                                color: "#374151"
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.getElementById("btnView")
+            .addEventListener("click", () => {
+
+                const date =
+                    document.getElementById("trendDate").value;
+                const type =
+                    document.getElementById("trendType").value;
+                const pcsId =
+                    document.getElementById("inverterSelect").value;
+
+                fetch(`/api/pcs/trend/${type}?date=${date}&pcsId=${pcsId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        renderChart(
+                            data.labels,
+                            data.charge,
+                            data.discharge,
+                            data.yLabel
+                        );
+                    });
+            });
+    </script>
+
+</th:block>

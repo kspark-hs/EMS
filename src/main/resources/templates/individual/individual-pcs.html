@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>PCS</title>
+</head>
+
+<body>
+
+<!-- ================= Content ================= -->
+<div th:fragment="content" class="flex-1 p-6 bg-gray-100 space-y-3">
+
+    <!-- ================= Page Header ================= -->
+    <div th:replace="~{
+        fragment/page/page-header :: pageHeader(
+            'PCS',
+            '모니터링 &nbsp;›&nbsp; 개별운전현황 &nbsp;›&nbsp;
+             <span class=&quot;text-gray-700 font-medium&quot;>PCS</span>',
+            ~{::emptySelector}
+        )
+    }"></div>
+    <div th:fragment="emptySelector"></div>
+
+    <!-- ================= Page Body ================= -->
+    <div class="space-y-6">
+
+        <!-- 상단 상태 카드 -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+            <!-- PCS 요약 -->
+            <div th:replace="~{fragment/pcs/pcs-summary-card :: pcsSummaryCard}"></div>
+
+            <!-- PCS 운전 상태 -->
+            <div th:replace="~{fragment/pcs/pcs-operation-card :: pcsOperationCard}"></div>
+
+            <!-- PCS 고장 상태 -->
+            <div th:replace="~{fragment/pcs/pcs-fault-status-card :: pcsFaultStatusCard}"></div>
+
+            <!-- PCS 상태 (복수 PCS) -->
+            <div th:replace="~{fragment/pcs/pcs-status-card :: pcsStatusCard}"></div>
+
+
+        </section>
+
+        <!-- PCS 고장정보 (Fault Bit 리스트) -->
+        <div th:replace="~{fragment/pcs/pcs-fault-detail-card :: pcsFaultDetailCard}"></div>
+
+
+    </div>
+</div>
+
+</body>
+</html>

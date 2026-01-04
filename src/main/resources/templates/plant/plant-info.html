@@ -1,0 +1,66 @@
+<th:block xmlns:th="http://www.thymeleaf.org"
+          th:fragment="content">
+
+    <div class="space-y-6">
+
+        <!-- =============================== -->
+        <!-- 발전소 요약정보 -->
+        <!-- =============================== -->
+        <section class="bg-white p-4 rounded shadow border border-gray-300">
+            <h2 class="text-lg font-semibold mb-4">발전소 요약정보</h2>
+
+            <table class="min-w-full text-sm md:text-base border">
+                <tbody>
+                <tr>
+                    <td class="border px-4 py-2 font-semibold w-1/3">발전소명</td>
+                    <td class="border px-4 py-2">일조솔라플랜트1호</td>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2 font-semibold">발전소 주소</td>
+                    <td class="border px-4 py-2">전라남도 고흥군 풍양면 율치리 산 132</td>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2 font-semibold">사용전 검사일</td>
+                    <td class="border px-4 py-2">2019-07-03</td>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2 font-semibold">계량기 봉인일</td>
+                    <td class="border px-4 py-2">2019-07-09</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- =============================== -->
+        <!-- 발전소 설비정보 -->
+        <!-- =============================== -->
+        <section class="bg-white p-4 rounded shadow border border-gray-300">
+            <h2 class="text-lg font-semibold mb-4">발전소 설비정보</h2>
+
+            <table class="min-w-full text-sm md:text-base border">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th class="border text-center">설비명</th>
+                    <th class="border text-center">설치용량 (kW)</th>
+                    <th class="border text-center">운영용량 (kW)</th>
+                    <th class="border text-center">수량 (EA)</th>
+                    <th class="border text-center">브랜드명</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr><td class="border px-2">태양광모듈</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td></tr>
+                <tr><td class="border px-2">태양광인버터</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td></tr>
+                <tr><td class="border px-2">배터리</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td></tr>
+                <tr><td class="border px-2">RACK</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td></tr>
+                <tr><td class="border px-2">PV 전력량계</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td></tr>
+                <tr><td class="border px-2">PCS</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td></tr>
+                <tr><td class="border px-2">온습도계</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td></tr>
+                <tr><td class="border px-2">ESS 전력량계</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td></tr>
+                <tr><td class="border px-2">소내 전력량계</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td><td class="border text-center">-</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+</th:block>

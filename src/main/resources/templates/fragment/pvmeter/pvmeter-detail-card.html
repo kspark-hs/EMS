@@ -1,0 +1,140 @@
+<!-- =================================================
+     PV 전력량계 상세정보 카드
+================================================== -->
+<div th:fragment="pvmeterDetailCard"
+     class="bg-white rounded-xl shadow p-4">
+
+    <!-- 카드 헤더 -->
+    <div class="flex items-center gap-2 pb-2 mb-4 border-b border-gray-200">
+        <span class="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
+        <h3 class="font-semibold text-gray-800">PV 전력량계 상세정보</h3>
+    </div>
+
+    <!-- =========================
+         상세 정보 (반응형)
+         PC: 2열 / Mobile: 1열
+    ========================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-sm">
+
+        <!-- ================= 전압 ================= -->
+        <div class="border rounded-lg p-3">
+            <h4 class="font-semibold text-gray-700 mb-2">전압</h4>
+
+            <div class="space-y-1">
+                <div class="flex justify-between">
+                    <span>평균 전압</span>
+                    <span class="font-semibold">235.97 V</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>A상 전압</span>
+                    <span class="font-semibold">235.88 V</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>B상 전압</span>
+                    <span class="font-semibold">235.54 V</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>C상 전압</span>
+                    <span class="font-semibold">236.48 V</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>AB 선간전압</span>
+                    <span class="font-semibold">408.15 V</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>BC 선간전압</span>
+                    <span class="font-semibold">409.27 V</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>CA 선간전압</span>
+                    <span class="font-semibold">408.97 V</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 전력 ================= -->
+        <div class="border rounded-lg p-3">
+            <h4 class="font-semibold text-gray-700 mb-2">전력</h4>
+
+            <div class="space-y-1">
+                <div class="flex justify-between">
+                    <span>유효전력</span>
+                    <span class="font-semibold">83.93 kW</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>무효전력</span>
+                    <span class="font-semibold">5.88 kVar</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>피상전력</span>
+                    <span class="font-semibold">0 kVA</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>총 누적 유효전력량</span>
+                    <span class="font-semibold">2.5 GWh</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>총 누적 무효전력량</span>
+                    <span class="font-semibold">315.28 MVarh</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>총 누적 피상전력량</span>
+                    <span class="font-semibold">0 kVAh</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 전류 ================= -->
+        <div class="border rounded-lg p-3">
+            <h4 class="font-semibold text-gray-700 mb-2">전류</h4>
+
+            <div class="space-y-1">
+                <div class="flex justify-between">
+                    <span>평균 전류</span>
+                    <span class="font-semibold">102.28 A</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>A상 전류</span>
+                    <span class="font-semibold">102.11 A</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>B상 전류</span>
+                    <span class="font-semibold">103.31 A</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>C상 전류</span>
+                    <span class="font-semibold">101.43 A</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 기타 ================= -->
+        <div class="border rounded-lg p-3">
+            <h4 class="font-semibold text-gray-700 mb-2">기타</h4>
+
+            <div class="space-y-1">
+                <div class="flex justify-between">
+                    <span>역률</span>
+                    <span class="font-semibold">99.66 %</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>주파수</span>
+                    <span class="font-semibold">60.03 Hz</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Ia 부하율</span>
+                    <span class="font-semibold">0 %</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Ib 부하율</span>
+                    <span class="font-semibold">0 %</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Ic 부하율</span>
+                    <span class="font-semibold">0 %</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

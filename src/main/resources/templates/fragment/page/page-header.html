@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- =================================================
+     빈 selector용 fragment (필수)
+     ================================================= -->
+<th:block th:fragment="emptySelector"></th:block>
+
+<!-- =================================================
+     Page Header
+     ================================================= -->
+<div th:fragment="pageHeader(title, breadcrumb, selector)">
+
+    <!-- Breadcrumb -->
+    <nav th:if="${breadcrumb != null}"
+         class="text-sm text-gray-500 mb-1">
+        <span th:utext="${breadcrumb}"></span>
+    </nav>
+
+    <!-- Title -->
+    <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-semibold text-gray-800 flex items-center gap-3">
+            <span class="w-1.5 h-6 bg-blue-500 rounded"></span>
+            <span th:text="${title}">제목</span>
+        </h1>
+
+        <!-- selector (항상 존재하는 fragment만 replace) -->
+        <div th:replace="${selector}"></div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!-- templates/fragment/battery/battery-rack-status-table-card.html -->
+<div th:fragment="batteryRackStatusTableCard"
+     class="bg-white rounded-xl shadow p-4">
+
+    <!-- ================= Header ================= -->
+    <div class="pb-2 mb-3 border-b border-gray-200 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+            <h2 class="font-semibold text-gray-700">Rack 상태</h2>
+        </div>
+        <span class="text-sm text-gray-500"
+              th:text="'운전 Rack '
+                  + ${rackStatusTable.activeRackCount}
+                  + ' / 전체 '
+                  + ${rackStatusTable.totalRackCount}">
+            운전 Rack 2 / 전체 3
+        </span>
+    </div>
+
+    <!-- ================= PC / Tablet ================= -->
+    <div class="hidden md:block">
+        <table class="w-full text-sm">
+            <thead>
+            <tr class="border-b">
+                <th class="text-left py-2">Rack</th>
+                <th class="text-left py-2">상태</th>
+                <th class="text-right py-2">Rack 전압(셀합)</th>
+                <th class="text-right py-2">DC 전류</th>
+                <th class="text-right py-2">SOC</th>
+                <th class="text-right py-2">최대 온도</th>
+                <th class="text-right py-2">최소 온도</th>
+            </tr>
+            </thead>
+
+            <!-- ================= PC / Tablet ================= -->
+            <tbody>
+            <tr th:each="rack : ${rackStatusTable.racks}"
+                class="border-b last:border-0 cursor-pointer hover:bg-gray-50"
+                th:classappend="${rack.rackNo} == ${selectedRackNo}
+                    ? ' bg-blue-50'
+                    : ''"
+                th:onclick="'location.href=\'/individual/battery?batteryNo='
+                    + ${batteryNo}
+                    + '&rackNo='
+                    + ${rack.rackNo}
+                    + '#rack-fault\''">
+                <td class="py-2" th:text="${rack.rackName}">RACK #1-1</td>
+
+                <td class="py-2 font-semibold"
+                    th:classappend="
+                        ${rack.status.name() == 'FAULT'}   ? ' text-red-600' :
+                        (${rack.status.name() == 'WARNING'} ? ' text-orange-600' : ' text-green-600')
+                    "
+                                    th:text="
+                        ${rack.status.name() == 'FAULT'}   ? '고장' :
+                        (${rack.status.name() == 'WARNING'} ? '주의' : '정상')
+                    ">
+                    정상
+                </td>
+
+                <!-- Rack Voltage : V / 소수점 2자리 -->
+                <td class="py-2 text-right">
+                    <span th:text="${rack.status.name() != 'FAULT'
+                        ? #numbers.formatDecimal(rack.rackVoltage,1,2)
+                        : '0.00'}">810.50</span>
+                    <span class="text-xs text-gray-400 ml-1">V</span>
+                </td>
+
+                <!-- DC Current : A / 소수점 2자리 -->
+                <td class="py-2 text-right">
+                    <span th:text="${rack.status.name() != 'FAULT'
+                        ? #numbers.formatDecimal(rack.dcCurrent,1,2)
+                        : '0.00'}">4.20</span>
+                    <span class="text-xs text-gray-400 ml-1">A</span>
+                </td>
+
+                <!-- SOC : % / 소수점 1자리 -->
+                <td class="py-2 text-right">
+                    <span th:text="${rack.status.name() != 'FAULT'
+                        ? #numbers.formatDecimal(rack.soc,1,1)
+                        : '-'}">90.0</span>
+                    <span class="text-xs text-gray-400 ml-1">%</span>
+                </td>
+
+                <!-- Max Temp : ℃ / 소수점 1자리 -->
+                <td class="py-2 text-right">
+                    <span th:text="${rack.status.name() != 'FAULT'
+                        ? #numbers.formatDecimal(rack.maxTemp,1,1)
+                        : '-'}">22.4</span>
+                    <span class="text-xs text-gray-400 ml-1">℃</span>
+                </td>
+
+                <!-- Min Temp : ℃ / 소수점 1자리 -->
+                <td class="py-2 text-right">
+                    <span th:text="${rack.status.name() != 'FAULT'
+                        ? #numbers.formatDecimal(rack.minTemp,1,1)
+                        : '-'}">18.1</span>
+                    <span class="text-xs text-gray-400 ml-1">℃</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ================= Mobile ================= -->
+    <div class="md:hidden space-y-3">
+        <div th:each="rack : ${rackStatusTable.racks}"
+             class="border rounded-lg p-3 cursor-pointer"
+             th:classappend="
+                ${rack.rackNo} == ${selectedRackNo}
+                    ? ' bg-blue-50'
+                    : (${rack.status.name() == 'FAULT'} ? ' text-gray-400' : '')
+             "
+             th:onclick="'location.href=\'/individual/battery?batteryNo='
+        + ${batteryNo}
+        + '&rackNo='
+        + ${rack.rackNo}
+        + '#rack-fault\''">
+
+            <div class="flex justify-between items-center mb-2">
+                <span class="font-semibold" th:text="${rack.rackName}">RACK #1-1</span>
+                <span class="text-sm font-semibold flex items-center gap-1"
+                      th:classappend="
+                        ${rack.status.name() == 'FAULT'}   ? ' text-red-600' :
+                        (${rack.status.name() == 'WARNING'} ? ' text-orange-600' : ' text-green-600')
+                      ">
+                    ●
+                    <span th:text="
+                        ${rack.status.name() == 'FAULT'}   ? '고장' :
+                        (${rack.status.name() == 'WARNING'} ? '주의' : '정상')
+                    ">정상</span>
+                </span>
+            </div>
+
+            <div class="text-sm space-y-1">
+                <div class="flex justify-between">
+                    <span>Rack 전압</span>
+                    <span th:text="${rack.status.name() != 'FAULT'
+                        ? #numbers.formatDecimal(rack.rackVoltage,1,2) + ' V'
+                        : '0.00 V'}">810.50 V</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>DC 전류</span>
+                    <span th:text="${rack.status.name() != 'FAULT'
+                        ? #numbers.formatDecimal(rack.dcCurrent,1,2) + ' A'
+                        : '0.00 A'}">4.20 A</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>SOC</span>
+                    <span th:text="${rack.status.name() != 'FAULT'
+                        ? #numbers.formatDecimal(rack.soc,1,1) + ' %'
+                        : '-'}">90.0 %</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>최대 온도</span>
+                    <span th:text="${rack.status.name() != 'FAULT'
+                        ? #numbers.formatDecimal(rack.maxTemp,1,1) + ' ℃'
+                        : '-'}">22.4 ℃</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>최소 온도</span>
+                    <span th:text="${rack.status.name() != 'FAULT'
+                        ? #numbers.formatDecimal(rack.minTemp,1,1) + ' ℃'
+                        : '-'}">18.1 ℃</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
