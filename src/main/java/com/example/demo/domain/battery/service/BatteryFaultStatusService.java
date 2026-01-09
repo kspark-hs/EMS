@@ -5,18 +5,27 @@ import com.example.demo.domain.battery.view.BatteryFaultStatusViewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BatteryFaultStatusService {
 
     private final BatteryFaultStatusProvider provider;
 
-    public BatteryFaultStatusViewDto getStatus(Long batteryId) {
+    public BatteryFaultStatusViewDto getStatus(List<Long> rackIds) {
 
-        boolean hasFault = provider.hasFault();
-        boolean internalCommOk = provider.isInternalCommOk();
-        boolean externalCommOk = provider.isExternalCommOk();
-        boolean interlockOk = provider.isInterlockOk();
+        boolean hasFault = false;
+        boolean internalCommOk = true;
+        boolean externalCommOk = true;
+        boolean interlockOk = true;
+
+        for (Long rackId : rackIds) {
+            hasFault |= provider.hasFault(rackId);
+            internalCommOk &= provider.isInternalCommOk(rackId);
+            externalCommOk &= provider.isExternalCommOk(rackId);
+            interlockOk &= provider.isInterlockOk(rackId);
+        }
 
         BatteryFaultStatusViewDto dto = new BatteryFaultStatusViewDto();
         dto.setFaultOccurred(hasFault ? "있음" : "없음");

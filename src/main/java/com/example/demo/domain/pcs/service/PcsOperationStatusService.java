@@ -1,52 +1,54 @@
 package com.example.demo.domain.pcs.service;
 
-import com.example.demo.domain.pcs.provider.PcsOperationStatusProvider;
+import com.example.demo.domain.pcs.status.*;
 import com.example.demo.domain.pcs.view.PcsOperationStatusViewDto;
-import com.example.demo.model.format.ValueFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * PCS 운전 상태 카드 Service
+ *
+ * 책임:
+ * - Aggregate Snapshot 기반 ViewDto 생성
+ * - 상태 해석(운전/정지/고장)만 수행
+ * - enum 값은 그대로 View로 전달
+ */
 @Service
 @RequiredArgsConstructor
 public class PcsOperationStatusService {
 
-    private final PcsOperationStatusProvider provider;
+    private final PcsAggregateStatusService aggregateStatusService;
 
-    public PcsOperationStatusViewDto getStatus() {
+    public PcsOperationStatusViewDto getOperationStatus(Long pcsId) {
 
-        // 1️⃣ Raw 상태 수집 (Provider)
-        boolean running = provider.isRunning();
-        boolean charging = provider.isCharging();
-        boolean discharging = provider.isDischarging();
+        /* =========================
+         * 1️⃣ Aggregate Snapshot
+         * ========================= */
+        PcsAggregateStatusSnapshot snapshot =
+                aggregateStatusService.getSnapshot(pcsId);
 
-        String operationMode = provider.getOperationMode(); // AUTO / MANUAL
-        String controlMode = provider.getControlMode();     // LOCAL / REMOTE
+        /* =========================
+         * 2️⃣ 동작 상태 (문자열 표현)
+         * ========================= */
+        String operationState =
+                switch (snapshot.getOverallStatus()) {
+                    case FAULT      -> "고장";
+                    case COMM_ERROR -> "통신 이상";
+                    case STOPPED    -> "정지";
+                    case NORMAL     -> snapshot.isOperable() ? "운전" : "정지";
+                };
 
-        // 2️⃣ 상태 해석 (정책은 Service 책임)
-        String operationState;
-        if (!running) {
-            operationState = "정지";
-        } else if (charging) {
-            operationState = "충전 중";
-        } else if (discharging) {
-            operationState = "방전 중";
-        } else {
-            operationState = "대기 중";
-        }
-
-        // 3️⃣ 일간 에너지 (임시 더미 → 추후 Energy Provider로 분리 가능)
-        Double todayCharge = 0.0;
-        Double todayDischarge = 0.0;
-
-        // 4️⃣ View DTO 조립
+        /* =========================
+         * 3️⃣ ViewDto 생성
+         * ========================= */
         PcsOperationStatusViewDto dto = new PcsOperationStatusViewDto();
-        dto.setOperationState(operationState);
-        dto.setOperationMode(operationMode);
-        dto.setControlMode(controlMode);
 
-        // 5️⃣ 숫자 포맷은 Service에서 단 한 번
-        dto.setTodayChargeEnergyKwh(ValueFormatter.f2(todayCharge));
-        dto.setTodayDischargeEnergyKwh(ValueFormatter.f2(todayDischarge));
+        dto.setOperationState(operationState);
+        dto.setOperationAvailable(snapshot.isOperable());
+
+        // ✅ enum 그대로 전달 (절대 변환하지 않음)
+        dto.setOperationMode(snapshot.getOperationMode());
+        dto.setControlMode(snapshot.getControlMode());
 
         return dto;
     }

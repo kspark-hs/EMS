@@ -2,6 +2,7 @@
      th:fragment="rackFaultDetailCard"
      class="bg-white rounded-xl shadow p-4">
 
+    <!-- 카드 헤더 -->
     <div class="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
 
         <div class="flex items-center gap-2">
@@ -10,14 +11,8 @@
         </div>
 
         <form method="get" th:action="@{/individual/battery}">
-
-            <!-- 🔴 배터리 컨텍스트 유지 -->
             <input type="hidden" name="batteryNo" th:value="${batteryNo}"/>
 
-            <!-- UX 제어용 -->
-            <input type="hidden" name="_rackRedirect" value="true"/>
-
-            <!-- 실제 변경 대상 -->
             <select name="rackNo"
                     class="border rounded px-2 py-1 text-sm bg-white"
                     onchange="this.form.submit()">
@@ -28,38 +23,29 @@
                 </option>
             </select>
         </form>
-
     </div>
 
-
-    <div class="
-    grid
-    grid-cols-2
-    md:grid-cols-4
-    gap-x-6
-    gap-y-3
-    text-sm
-">
+    <!-- PCS와 동일 grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-3 text-sm">
 
         <div th:each="item : ${rackFaultItems}"
              class="flex items-center gap-2 min-h-[24px]">
 
-        <span class="inline-block w-2 h-2 rounded-full"
-              th:classappend="${item.fault}
-                    ? 'bg-red-500'
-                    : 'bg-gray-300'">
-        </span>
+            <!-- 상태 블릿 -->
+            <span class="inline-block w-2 h-2 rounded-full"
+                  th:classappend="${item.occurred}
+                        ? 'bg-red-500'
+                        : 'bg-gray-300'">
+            </span>
 
-            <span th:text="${item.label}"
+            <!-- 고장 명칭 -->
+            <span th:text="${item.faultName}"
                   class="leading-none"
-                  th:classappend="${item.fault}
-                    ? 'text-red-600 font-semibold'
-                    : 'text-gray-600'">
-        </span>
+                  th:classappend="${item.occurred}
+                        ? 'text-red-600 font-semibold'
+                        : 'text-gray-600'">
+            </span>
         </div>
 
     </div>
-
-
-
 </div>

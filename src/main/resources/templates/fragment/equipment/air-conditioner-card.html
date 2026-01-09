@@ -2,104 +2,108 @@
      th:fragment="airConditionerCard"
      class="bg-white rounded-xl shadow p-4 min-h-[180px]">
 
-    <!-- =========================================
-         에어컨 상태 카드 (최종본)
-         - DTO 단일 바인딩
-         - 색상/굵기 규칙 통일
-         - LG / AirMajor Provider 확장 대응
-    ========================================= -->
-
-    <!-- 카드 헤더 -->
+    <!-- =========================
+         카드 헤더
+    ========================= -->
     <div class="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
+
+        <!-- 좌측 : 아이콘 + 제목 -->
         <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
+            <span class="w-2 h-2 rounded-full bg-green-500"></span>
             <h2 class="font-semibold text-gray-700">에어컨</h2>
         </div>
 
-        <!-- 에어컨 선택 -->
-        <form method="get" th:action="@{/individual/battery}">
-            <select name="airConditionerId"
-                    class="border rounded px-2 py-1 text-xs h-7 bg-white"
-                    onchange="this.form.submit()">
+        <!-- 우측 : 상세 버튼 + 에어컨 선택 -->
+        <div class="flex items-center gap-2">
 
-                <option th:each="ac : ${airConditionerList}"
-                        th:value="${ac.acId}"
-                        th:selected="${ac.acId == selectedAirConditionerId}"
-                        th:text="${ac.acId}">
-                </option>
+            <!-- 🔹 상세 버튼 -->
+            <button type="button"
+                    class="text-xs text-blue-600 border border-blue-300 rounded px-2 py-1 hover:bg-blue-50"
+                    onclick="toggleAirConditionerDetail(this)">
+                상세
+            </button>
 
-            </select>
-        </form>
+            <!-- 🔹 에어컨 선택 -->
+            <form method="get" th:action="@{/individual/battery}">
+                <select name="airConditionerId"
+                        class="text-xs border border-gray-300 rounded px-2 py-1
+                               focus:outline-none focus:ring-1 focus:ring-blue-400"
+                        onchange="this.form.submit()">
+
+                    <option th:each="ac, stat : ${airConditionerList}"
+                            th:value="${ac.acId}"
+                            th:text="'에어컨 #' + ${stat.index + 1}"
+                            th:selected="${ac.acId == selectedAirConditionerId}">
+                    </option>
+
+                </select>
+            </form>
+        </div>
     </div>
 
-    <!-- 카드 본문 -->
-    <div class="text-sm text-gray-700 space-y-1">
 
-        <!-- 상태 -->
-        <div class="flex justify-between">
-            <span>상태</span>
-            <span class="font-semibold"
-                  th:text="${airConditioner.operationStatusText}"
-                  th:classappend="
-                      ${airConditioner.communicationOk}
-                      ? ' text-green-600'
-                      : ' text-red-600'
-                  ">
-                정상 운전 중
-            </span>
-        </div>
+    <!-- =========================
+         카드 본문 (요약 Row = rows[0])
+    ========================= -->
+    <div class="text-sm text-gray-700"
+         th:if="${airConditionerStatusTable != null
+                 and airConditionerStatusTable.rows != null
+                 and !airConditionerStatusTable.rows.isEmpty()}">
 
-        <!-- 운전 모드 -->
-        <div class="flex justify-between">
-            <span>운전 모드</span>
-            <span th:text="${airConditioner.operationMode}">COOL</span>
-        </div>
+        <th:block th:with="row=${airConditionerStatusTable.rows[0]}">
 
-        <!-- 제어 방식 -->
-        <div class="flex justify-between">
-            <span>제어 방식</span>
-            <span th:text="${airConditioner.controlMode}">AUTO</span>
-        </div>
-
-        <!-- 설정 온도 -->
-        <div class="flex justify-between">
-            <span>설정 온도</span>
-            <span>
+            <!-- 상태 -->
+            <div class="flex justify-between py-1">
+                <span>상태</span>
                 <span class="font-semibold"
-                      th:text="${airConditioner.setTemp}">25</span>
-                <span> ℃</span>
-            </span>
-        </div>
+                      th:text="${row.healthStatusText}"
+                      th:classappend="' ' + ${row.healthStatusClass}">
+                </span>
+            </div>
 
-        <!-- 풍량 -->
-        <div class="flex justify-between">
-            <span>풍량</span>
-            <span th:text="${airConditioner.fanSpeed}">AUTO</span>
-        </div>
+            <!-- 제어 -->
+            <div class="flex justify-between py-1">
+                <span>제어</span>
+                <span th:utext="${row.controlSummaryText}">
+                    자동<br/>(온습도)
+                </span>
+            </div>
 
-        <!-- EMS 대응 상태 -->
-        <div class="pt-2 font-semibold">
+            <!-- ✅ AUTO 제어 보조 문구 (제어 바로 아래) -->
+            <p th:if="${row.controlSubText != null}"
+               class="text-xs text-gray-500 ml-14 mt-1"
+               th:text="${row.controlSubText}">
+            </p>
 
-            <!-- 능동대응 -->
-            <span th:if="${airConditioner.responseState == '능동대응'}"
-                  class="text-green-600">
-                능동대응
-            </span>
+            <!-- 운전 -->
+            <div class="flex justify-between py-1">
+                <span>운전</span>
+                <span th:text="${row.operationSummaryText}">
+                    냉방 / 24℃ / 중풍
+                </span>
+            </div>
 
-            <!-- 수동 유지 -->
-            <span th:if="${airConditioner.responseState == '수동유지'}"
-                  class="text-gray-600">
-                수동 유지
-            </span>
+            <!-- 통신 -->
+            <div class="flex justify-between py-1">
+                <span>통신</span>
+                <span class="font-semibold"
+                      th:text="${row.online ? '정상' : '단절'}"
+                      th:classappend="${row.online}
+                            ? ' text-green-600'
+                            : ' text-red-600'">
+                </span>
+            </div>
 
-            <!-- 복구 대응 -->
-            <span th:if="${airConditioner.responseState == '복구대응'}"
-                  class="text-red-600">
-                복구대응
-            </span>
+        </th:block>
+    </div>
 
-        </div>
 
+    <!-- 에어컨 상세 (구조만 유지, 내용은 추후 구현) -->
+    <div class="air-conditioner-detail hidden mt-3">
+        <div th:replace="~{
+            fragment/equipment/air-conditioner-detail-card
+            :: airConditionerDetailCard
+        }"></div>
     </div>
 
 </div>

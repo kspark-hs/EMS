@@ -1,0 +1,61 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     th:fragment="airConditionerDetailCard">
+
+    <div class="bg-gray-50 rounded-lg border p-3">
+
+        <!-- 카드 헤더 -->
+        <div class="flex items-center gap-2 mb-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-green-500"></span>
+            <h3 class="text-sm font-semibold text-gray-700">
+                에어컨 상세
+            </h3>
+        </div>
+
+        <!-- 테이블 -->
+        <table class="w-full text-xs border-t border-gray-200">
+            <thead>
+            <tr class="text-gray-500 text-center">
+                <th class="py-2 w-12">ID</th>
+                <th class="w-16">상태</th>
+                <th class="w-24">제어</th>
+                <th>운전</th>
+                <th class="w-16">통신</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="row, stat : ${airConditionerStatusTable.rows}"
+                th:if="${stat.index < 4}"
+                class="border-t border-gray-200 text-center">
+
+                <!-- ID -->
+                <td class="py-1 font-medium"
+                    th:text="${stat.index + 1}">
+                </td>
+
+                <!-- 상태 -->
+                <td th:text="${row.healthStatusText}"
+                    th:classappend="' ' + ${row.healthStatusClass}">
+                </td>
+
+                <!-- 제어 (두 줄 허용) -->
+                <td th:utext="${row.controlSummaryHtml}">
+                </td>
+
+
+                <!-- 운전 -->
+                <td th:text="${row.operationSummaryText}">
+                </td>
+
+                <!-- 통신 -->
+                <td th:text="${row.online ? '정상' : '단절'}"
+                    th:classappend="${row.online ? ' text-green-600' : ' text-red-600'}">
+                </td>
+
+            </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+</div>

@@ -16,18 +16,28 @@
         <!-- PCS 상태 -->
         <div class="flex justify-between">
             <span class="text-gray-500">PCS 상태</span>
-            <span class="font-semibold text-green-600"
-                  th:text="${pcsSummary.pcsStatus}">
-                운전
+            <span class="font-semibold"
+                  th:text="${pcsSummary.pcsStatus}"
+                  th:classappend="
+                    ${pcsSummary.pcsStatus} == '정상'
+                        ? ' text-green-600'
+                        : (${pcsSummary.pcsStatus} == '정지'
+                            ? ' text-gray-500'
+                            : ' text-red-600')
+                  ">
             </span>
         </div>
 
         <!-- 충/방전 상태 -->
         <div class="flex justify-between">
             <span class="text-gray-500">충/방전 상태</span>
-            <span class="font-semibold text-green-600"
-                  th:text="${pcsSummary.chargeDischargeStatus}">
-                대기
+            <span class="font-semibold"
+                  th:text="${pcsSummary.chargeDischargeStatus}"
+                  th:classappend="
+                    ${pcsSummary.chargeDischargeStatus} == '정지'
+                        ? ' text-gray-500'
+                        : ' text-green-600'
+                  ">
             </span>
         </div>
 
@@ -57,7 +67,6 @@
                 <span class="text-sm">kW</span>
             </span>
         </div>
-
 
     </div>
 </div>

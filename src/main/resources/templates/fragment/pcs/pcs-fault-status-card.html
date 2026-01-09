@@ -1,40 +1,54 @@
 <!-- =========================================
-     PCS 고장 상태 카드
+     PCS 고장 상태 카드 (전체 기준)
+     기준:
+     - pcsFaultStatus.hasFault
+     - pcsFaultStatus.internalCommOk
+     - pcsFaultStatus.externalCommOk
 ========================================= -->
 <div xmlns:th="http://www.thymeleaf.org"
      th:fragment="pcsFaultStatusCard"
+     th:if="${pcsFaultStatus != null}"
      class="bg-white rounded-xl shadow p-4">
 
     <!-- 카드 헤더 -->
     <div class="flex items-center gap-2 pb-2 mb-3 border-b border-gray-200">
-        <span class="inline-block w-2 h-2 rounded-full bg-red-500"></span>
+        <span class="inline-block w-2 h-2 rounded-full"
+              th:classappend="${pcsFaultStatus.hasFault
+                    ? 'bg-red-500'
+                    : 'bg-green-500'}">
+        </span>
         <h3 class="font-semibold text-gray-800">고장 상태</h3>
     </div>
 
-    <!-- 상태 항목 -->
     <div class="grid grid-cols-2 gap-y-2 text-sm">
 
+        <!-- 고장 발생 -->
         <div class="text-gray-500">고장 발생</div>
-        <div class="font-medium text-right"
-             th:text="${pcsFaultStatus.faultOccurred}">
-            없음
+        <div class="text-right font-bold"
+             th:text="${pcsFaultStatus.hasFault ? '고장' : '정상'}"
+             th:classappend="${pcsFaultStatus.hasFault
+                    ? ' text-red-600'
+                    : ' text-green-600'}">
+            정상
         </div>
 
+        <!-- 내부 통신 -->
         <div class="text-gray-500">내부 통신 상태</div>
-        <div class="font-medium text-right"
-             th:text="${pcsFaultStatus.internalCommStatus}">
+        <div class="text-right font-bold"
+             th:text="${pcsFaultStatus.internalCommOk ? '정상' : '두절'}"
+             th:classappend="${pcsFaultStatus.internalCommOk
+                    ? ' text-green-600'
+                    : ' text-red-600'}">
             정상
         </div>
 
+        <!-- 외부 통신 -->
         <div class="text-gray-500">외부 통신 상태</div>
-        <div class="font-medium text-right"
-             th:text="${pcsFaultStatus.externalCommStatus}">
-            정상
-        </div>
-
-        <div class="text-gray-500">인터록 상태</div>
-        <div class="font-medium text-right"
-             th:text="${pcsFaultStatus.interlockStatus}">
+        <div class="text-right font-bold"
+             th:text="${pcsFaultStatus.externalCommOk ? '정상' : '두절'}"
+             th:classappend="${pcsFaultStatus.externalCommOk
+                    ? ' text-green-600'
+                    : ' text-red-600'}">
             정상
         </div>
 

@@ -14,27 +14,9 @@ import lombok.Getter;
  * - rackNo는 DB 연동 이후에만 값이 채워짐
  * - 현재 단계에서는 null 허용 (Battery 공통 Fault)
  */
-@Getter
-@AllArgsConstructor
-public class BatteryFaultDetailViewDto {
-
-    /**
-     * Rack 번호
-     * - Battery 고장 상세: null
-     * - Rack 고장정보 화면: rackNo 값 존재
-     */
-    private Integer rackNo;
-
-    /** 화면 표시명 */
-    private String label;
-
-    /** 고장 여부 */
-    private boolean fault;
-
-    /**
-     * 그룹 키
-     * - COMM / CELL / STRING / PROTECTION 등
-     * - Rack 고장정보 카드 그룹 정렬 기준
-     */
-    private String groupKey;
-}
+public record BatteryFaultDetailViewDto(
+        Integer rackNo,
+        String faultName,
+        boolean occurred,
+        String groupKey
+) {}

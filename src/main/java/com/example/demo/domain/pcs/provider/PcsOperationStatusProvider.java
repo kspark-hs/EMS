@@ -1,27 +1,37 @@
 package com.example.demo.domain.pcs.provider;
 
 /**
- * PCS 운전 상태 Provider (계약)
+ * PCS 운전 상태 Provider 계약
  *
- * 책임:
- * - PCS 운전/제어 관련 Raw 상태 제공
- * - RTU / DB / Memory Map 값 그대로 반환
- * - 해석(운전중/정지/충전/방전)은 Service 책임
+ * ✔ 벤더/브랜드별 Raw 데이터 해석
+ * ✔ 1차 상태 판단 수행
+ *
+ * ❌ UI / View / Controller 의존 금지
  */
 public interface PcsOperationStatusProvider {
 
-    /** PCS 운전 가능 상태 (RUN 신호) */
-    boolean isRunning();
+    /**
+     * 고장 / 보호정지 존재 여부
+     */
+    boolean isFaultExist(Long pcsId);
 
-    /** PCS 운전 모드 (AUTO / MANUAL) */
-    String getOperationMode();
+    /**
+     * 운전 가능 여부
+     * - 인터록
+     * - 보호정지
+     * - 통신 불가
+     */
+    boolean isOperationAvailable(Long pcsId);
 
-    /** 제어 위치 (LOCAL / REMOTE) */
-    String getControlMode();
+    /**
+     * 운전 모드
+     * 허용 값: AUTO / MANUAL / LOCAL
+     */
+    String getOperationMode(Long pcsId);
 
-    /** 충전 중 여부 */
-    boolean isCharging();
-
-    /** 방전 중 여부 */
-    boolean isDischarging();
+    /**
+     * 제어 모드
+     * 허용 값: REMOTE / LOCAL
+     */
+    String getControlMode(Long pcsId);
 }

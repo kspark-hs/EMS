@@ -5,6 +5,11 @@ package com.example.demo.domain.pcs.status;
  *
  * - Modbus Memory Map 다수 bit → 의미 단위 Fault로 통합
  * - UI / Alarm / History / Notification 공통 기준
+ *
+ * ⚠ 주의
+ * - INTERLOCK은 구조적으로 "고장(Fault)"이 아님
+ * - 현재는 전파 구조 검증을 위한 임시 포함
+ * - 향후 BlockReason 계층으로 분리 예정
  */
 public enum PcsFaultType {
 
@@ -41,6 +46,12 @@ public enum PcsFaultType {
     /* =========================
      * D. 보호 / 안전
      * ========================= */
+
+    // 🔒 시스템 차단 (운전 불가 Gate, 고장 아님)
+    // - 전파 구조 검증을 위한 임시 포함
+    // - 향후 PcsBlockReason.INTERLOCK 로 분리 예정
+    INTERLOCK("Interlock Active", true, "SYSTEM"),
+
     GROUND_FAULT("Ground Fault", true, null),
     EMERGENCY_STOP("Emergency Stop", true, null),
     DOOR_OPEN("Door Open", true, null),
@@ -59,7 +70,18 @@ public enum PcsFaultType {
     PARAMETER_ERROR("Parameter Error", true, null),
     SOC_WARNING("SOC Warning", true, null),
     TEST_MODE("Test Mode", true, null),
-    SMPS_FAULT("SMPS Fault", true, null);
+    SMPS_FAULT("SMPS Fault", true, null),
+
+    /* =========================
+     * G. External Communication (System Diagnostic)
+     * ========================= */
+
+    // 🔴 PCS 내부 통신 (CPU ↔ DSP, Controller ↔ Power Board)
+    INTERNAL_COMM_LOSS("Internal Communication Loss", true, "INTERNAL"),
+
+    // 🔴 외부 통신 (EMS / RTU / SCADA)
+    EXTERNAL_COMM_LOSS("External Communication Loss", true, "EXTERNAL"),
+    EXTERNAL_COMM_TIMEOUT("External Communication Timeout", true, "EXTERNAL");
 
     private final String label;
     private final boolean uiVisible;
@@ -83,4 +105,3 @@ public enum PcsFaultType {
         return groupKey;
     }
 }
-

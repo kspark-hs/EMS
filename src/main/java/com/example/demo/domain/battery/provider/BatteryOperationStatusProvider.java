@@ -2,6 +2,8 @@ package com.example.demo.domain.battery.provider;
 
 import com.example.demo.domain.battery.dto.BatteryOperationStatusRawDto;
 
+import java.util.List;
+
 /**
  * 배터리 운전 상태 Provider (원본 데이터 전용)
  *
@@ -10,7 +12,13 @@ import com.example.demo.domain.battery.dto.BatteryOperationStatusRawDto;
  */
 public interface BatteryOperationStatusProvider {
 
-    BatteryOperationStatusRawDto getOperationStatus(Long batteryId);
+    /**
+     * Battery 운전 Raw 상태
+     * - rackIds 기준
+     * - 판단 로직 없음
+     */
+    BatteryOperationStatusRawDto getOperationStatus(List<Long> rackIds);
 }
+
 
 

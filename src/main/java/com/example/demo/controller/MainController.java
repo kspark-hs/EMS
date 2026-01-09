@@ -1,16 +1,24 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.battery.service.*;
+import com.example.demo.domain.battery.status.BatteryAggregateStatusSnapshot;
 import com.example.demo.domain.battery.view.*;
 import com.example.demo.domain.equipment.airconditioner.service.AirConditionerService;
+import com.example.demo.domain.equipment.airconditioner.service.AirConditionerStatusTableService;
 import com.example.demo.domain.equipment.firesystem.service.FireSystemStatusTableService;
 import com.example.demo.domain.equipment.temperaturehumidity.service.TemperatureHumidityStatusTableService;
-import com.example.demo.domain.pvmeter.service.*;
-import com.example.demo.domain.pcs.service.PcsStatusTableService;
+import com.example.demo.domain.equipment.temperaturehumidity.view.TemperatureHumidityStatusTableViewDto;
+import com.example.demo.domain.pcs.fault.PcsFaultSnapshot;
+import com.example.demo.domain.pcs.fault.PcsFaultSnapshotService;
 import com.example.demo.domain.pcs.service.*;
-
-import com.example.demo.domain.pcs.view.PcsOperationStatusViewDto;
+import com.example.demo.domain.pcs.status.PcsAggregateStatusSnapshot;
+import com.example.demo.domain.pcs.status.PcsFaultType;
+import com.example.demo.domain.pcs.status.PcsOverallStatusType;
+import com.example.demo.domain.pcs.view.PcsAggregateStatusViewDto;
+import com.example.demo.domain.pcs.view.PcsFaultStatusViewDto;
+import com.example.demo.domain.pcs.view.PcsStatusTableRowViewDto;
 import com.example.demo.domain.pcs.view.PcsSummaryViewDto;
+import com.example.demo.domain.pvmeter.service.*;
 import com.example.demo.model.PlantCardDto;
 import com.example.demo.model.PlantEquipmentDto;
 import com.example.demo.model.PlantInfoDto;
@@ -22,10 +30,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -44,7 +53,6 @@ public class MainController {
     private final PvMeterOperationStatusService pvMeterOperationStatusService;
     private final PvMeterFaultStatusService pvMeterFaultStatusService;
     private final PvMeterStatusRowService pvMeterStatusRowService;
-    private final PcsFaultStatusService pcsFaultStatusService;
     private final BatteryRackStatusTableService batteryRackStatusTableService;
     private final BatteryOperationStatusService batteryOperationStatusService;
     private final BatteryFaultStatusService batteryFaultStatusService;
@@ -54,7 +62,14 @@ public class MainController {
     private final TemperatureHumidityStatusTableService
             temperatureHumidityStatusTableService;
     private final AirConditionerService airConditionerService;
+    private final AirConditionerStatusTableService airConditionerStatusTableService;
     private final FireSystemStatusTableService fireSystemStatusTableService;
+    private final PcsAggregateStatusService pcsAggregateStatusService;
+
+    private final PcsStatusTableService pcsStatusTableService;
+    private final PcsFaultSnapshotService pcsFaultSnapshotService;
+    private final BatteryAggregateStatusService batteryAggregateStatusService;
+
 
     /* ==================================================
        ROOT
@@ -195,6 +210,8 @@ public class MainController {
         return "index";
     }
 
+
+
     @GetMapping("/individual/battery")
     public String individualBattery(
             @RequestParam(value = "batteryNo", defaultValue = "1") int batteryNo,
@@ -204,135 +221,131 @@ public class MainController {
             Model model
     ) {
 
-
+        /* =========================
+         * 기본 화면 설정
+         * ========================= */
         model.addAttribute("contentTemplate", "individual/individual-battery");
         model.addAttribute("batteryNo", batteryNo);
-        model.addAttribute("selectedRackNo", rackNo);
-        model.addAttribute("selectedSensorNo", sensorNo != null ? sensorNo : 1
-        );
-
-        Long batteryId = (long) batteryNo;
 
         /* =========================
-         * Rack 상태
+         * 🔑 Controller 책임: rackIds 확보
+         * ========================= */
+        // TODO: 추후 DB / 설정 기반으로 교체
+        List<Long> rackIds = List.of(1L, 2L, 3L, 4L, 5L, 6L);
+
+        // rackNo 보정 (1 ~ rackCount)
+        int rackCount = rackIds.size();
+        int selectedRackNo = Math.min(Math.max(rackNo, 1), rackCount);
+        model.addAttribute("selectedRackNo", selectedRackNo);
+
+        // sensorNo 보정
+        int selectedSensorNo = (sensorNo != null) ? sensorNo : 1;
+        model.addAttribute("selectedSensorNo", selectedSensorNo);
+
+        /* =========================
+         * Rack 선택 옵션 (번호 기준)
+         * ========================= */
+        List<Integer> rackOptions = new ArrayList<>();
+        for (int i = 1; i <= rackCount; i++) {
+            rackOptions.add(i);
+        }
+        model.addAttribute("rackOptions", rackOptions);
+
+        /* =========================
+         * Rack 상태 테이블
          * ========================= */
         BatteryRackStatusTableViewDto rackStatusTable =
-                batteryRackStatusTableService.getRackStatusTable(batteryId);
-
+                batteryRackStatusTableService.getRackStatusTable(rackIds);
         model.addAttribute("rackStatusTable", rackStatusTable);
 
+        /* =========================
+         * Battery Aggregate 상태
+         * ========================= */
+        BatteryAggregateStatusSnapshot aggregateStatus =
+                batteryAggregateStatusService.getSnapshot(rackIds);
+        model.addAttribute("aggregateStatus", aggregateStatus);
 
-        // ✅ 운전 상태 (Service에서 계산)
+        /* =========================
+         * Battery Operation 상태
+         * ========================= */
         BatteryOperationStatusViewDto operationStatus =
-                batteryOperationStatusService.decide(batteryId);
-
+                batteryOperationStatusService.decide(rackIds);
         model.addAttribute("operationStatus", operationStatus);
 
         /* =========================
-         * 배터리 요약 (Service 기준)
+         * Battery Summary
          * ========================= */
         BatterySummaryViewDto batterySummary =
-                batterySummaryService.getSummary(batteryId);
-
+                batterySummaryService.getSummary(rackIds);
         model.addAttribute("batterySummary", batterySummary);
 
-
         /* =========================
-         * 🔴 배터리 고장 상태 카드용 DTO (PCS와 동일 패턴)
+         * Battery Fault Status (Aggregate)
          * ========================= */
         BatteryFaultStatusViewDto batteryFaultStatus =
-                batteryFaultStatusService.getStatus(batteryId);
-
+                batteryFaultStatusService.getStatus(rackIds);
         model.addAttribute("batteryFaultStatus", batteryFaultStatus);
 
-
         /* =========================
-         * 🔴 Rack 고장 상세 카드
-         *  - Battery 고장 상세를 Rack 기준으로 필터링
+         * Rack Fault Detail (선택 Rack)
+         * - 현재는 rackId == rackNo 가정
          * ========================= */
-        List<BatteryFaultDetailViewDto> allFaultDetails =
-                batteryFaultDetailService.getFaultDetails(batteryId);
+        Long selectedRackId = (long) selectedRackNo;
 
-        /* 임시 Rack 필터 (rackNo 기준) */
-        List<BatteryFaultDetailViewDto> rackFaultDetails = allFaultDetails;
-
-        model.addAttribute("rackFaultItems", rackFaultDetails);
-
-        /* Rack 선택 옵션 (더미) */
-        model.addAttribute("rackOptions", List.of(1, 2, 3, 4, 5, 6));
+        model.addAttribute(
+                "rackFaultItems",
+                batteryFaultDetailService.getRackFaultDetails(selectedRackId)
+        );
 
 
         /* =========================
-         * 🔴 배터리 고장 상세 카드 (Detail)
-         * ========================= */
-        List<BatteryFaultDetailViewDto> batteryFaultDetails =
-                batteryFaultDetailService.getFaultDetails(batteryId);
-
-        model.addAttribute("batteryFaultDetail", batteryFaultDetails);
-
-
-        /* =========================
-         * 🔥 소방설비 상태
+         * 소방설비 상태
          * ========================= */
         model.addAttribute(
                 "fireSystemTable",
                 fireSystemStatusTableService.getStatusTable()
         );
 
+        /* =========================
+         * 온습도계
+         * ========================= */
+        TemperatureHumidityStatusTableViewDto temperatureHumidityTable =
+                temperatureHumidityStatusTableService.getStatusTable();
+        model.addAttribute("temperatureHumidityTable", temperatureHumidityTable);
+
+        model.addAttribute("temperatureHumiditySensorOptions", List.of(1, 2));
+        model.addAttribute("selectedSensorNo", selectedSensorNo);
 
         /* =========================
-         * 🟦 온습도계
+         * 에어컨
          * ========================= */
-        model.addAttribute(
-                "temperatureHumidityTable",
-                temperatureHumidityStatusTableService.getStatusTable()
-        );
-
-        /* =========================
-         * 🟦 온습도계 Select (더미)
-         * ========================= */
-        model.addAttribute(
-                "temperatureHumiditySensorOptions",
-                List.of(1, 2)
-        );
-
-        model.addAttribute(
-                "selectedSensorNo",
-                sensorNo != null ? sensorNo : 1
-        );
-
-
-        /* =========================
-         * 🟦 에어컨
-         * ========================= */
-
-        /* 1️⃣ 기본 선택 에어컨 */
         String selectedAirConditionerId =
                 (airConditionerId != null && !airConditionerId.isBlank())
                         ? airConditionerId
                         : "AC-01";
 
-        /* 2️⃣ 에어컨 상태 (Service) */
         model.addAttribute(
-                "airConditioner",
-                airConditionerService.getView(selectedAirConditionerId)
+                "airConditionerStatusTable",
+                airConditionerStatusTableService.getStatusTable(
+                        Long.parseLong(selectedAirConditionerId.replace("AC-", "")),
+                        temperatureHumidityTable.getTempMax(),
+                        temperatureHumidityTable.getHumidityMax()
+                )
         );
 
-        /* 3️⃣ 에어컨 목록 (Service) */
         model.addAttribute(
                 "airConditionerList",
                 airConditionerService.getAirConditionerList()
         );
 
-        /* 4️⃣ 선택된 에어컨 ID */
-        model.addAttribute(
-                "selectedAirConditionerId",
-                selectedAirConditionerId
-        );
-
+        model.addAttribute("selectedAirConditionerId", selectedAirConditionerId);
 
         return "index";
     }
+
+
+
+
 
 
 
@@ -343,6 +356,9 @@ public class MainController {
     ) {
         model.addAttribute("contentTemplate", "individual/individual-pcs");
 
+        /* =========================
+         * PCS 개수 / 선택 번호
+         * ========================= */
         int pcsCount = pcsSettingService.getSetting().getPcsCount();
         if (pcsCount < 1) pcsCount = 1;
 
@@ -350,56 +366,136 @@ public class MainController {
                 ? 1
                 : Math.min(Math.max(pcsNo, 1), pcsCount);
 
+        Long selectedPcsId = (long) selectedPcsNo;
 
-
+        /* =========================
+         * PCS 선택 옵션
+         * ========================= */
         List<Integer> pcsOptions = new ArrayList<>();
         for (int i = 1; i <= pcsCount; i++) {
             pcsOptions.add(i);
         }
-
         model.addAttribute("pcsOptions", pcsOptions);
         model.addAttribute("selectedPcsNo", selectedPcsNo);
 
-        /* =========================
-         * 2️⃣ PCS 요약 카드 DTO
-         * ========================= */
-        PcsSummaryViewDto pcsSummary = pcsSummaryService.getSummary();
+        /* =====================================================
+         * 🔵 0️⃣ PCS 요약 (선택된 PCS 기준)
+         * ===================================================== */
+        PcsSummaryViewDto pcsSummary =
+                pcsSummaryService.getSummary(selectedPcsId);
+
         model.addAttribute("pcsSummary", pcsSummary);
 
-        /* =========================
-         * 3️⃣ PCS 운전 상태 카드 DTO
-         * ========================= */
-        PcsOperationStatusViewDto pcsOperationStatus =
-                pcsOperationStatusService.getStatus();
-        model.addAttribute("pcsOperationStatus", pcsOperationStatus);
-
-        /* =========================
-         * 4️⃣ PCS 고장 상태 카드
-         * ========================= */
+        /* =====================================================
+         * 🟦 1️⃣ 단일 PCS 운전 상태 (운전/모드/제어)
+         * - Aggregate Snapshot 사용 (Source of Truth)
+         * ===================================================== */
         model.addAttribute(
-                "pcsFaultStatus",
-                pcsFaultStatusService.getStatus((long) selectedPcsNo)
+                "pcsOperationStatus",
+                pcsOperationStatusService.getOperationStatus(selectedPcsId)
         );
 
-        /* =========================
-         * 5️⃣ PCS 상태 테이블
-         * ========================= */
-        model.addAttribute("pcsRunningCount", pcsStatusRowService.getRunningCount());
+        // =========================
+        // PCS Aggregate Status
+        // =========================
+        PcsAggregateStatusSnapshot aggregate =
+                pcsAggregateStatusService.getSnapshot(selectedPcsId);
+
+        // =========================
+        // PCS Fault Status (표시 전용)
+        // =========================
+        PcsFaultStatusViewDto pcsFaultStatus = new PcsFaultStatusViewDto();
+
+        // 고장 발생 여부
+        pcsFaultStatus.setHasFault(
+                aggregate.getOverallStatus() == PcsOverallStatusType.FAULT
+        );
+
+        // 통신 상태 (요약 카드 기준: 통합 comm)
+        pcsFaultStatus.setInternalCommOk(aggregate.isInternalCommOk());
+        pcsFaultStatus.setExternalCommOk(aggregate.isExternalCommOk());
+
+        model.addAttribute("pcsFaultStatus", pcsFaultStatus);
+
+
+
+        /* =====================================================
+         * 🟥 3️⃣ PCS별 내부 통신 상태 (Snapshot 기준)
+         * ===================================================== */
+        Map<Long, String> pcsCommStatusMap = new HashMap<>();
+
+        for (long pcsId = 1; pcsId <= pcsCount; pcsId++) {
+
+            PcsFaultSnapshot snapshot =
+                    pcsFaultSnapshotService.getSnapshot(pcsId);
+
+            boolean internalCommLoss =
+                    Boolean.TRUE.equals(
+                            snapshot.getFaultMap()
+                                    .get(PcsFaultType.INTERNAL_COMM_LOSS)
+                    );
+
+            pcsCommStatusMap.put(pcsId, internalCommLoss ? "두절" : "정상");
+        }
+
+        /* =====================================================
+         * 🟧 4️⃣ PCS별 상태 판결 (Snapshot 기준)
+         * - 하나라도 fault true → 고장
+         * ===================================================== */
+        Map<Long, String> pcsStatusMap = new HashMap<>();
+
+        for (long pcsId = 1; pcsId <= pcsCount; pcsId++) {
+
+            PcsFaultSnapshot snapshot =
+                    pcsFaultSnapshotService.getSnapshot(pcsId);
+
+            boolean hasFault =
+                    snapshot.getFaultMap()
+                            .values()
+                            .stream()
+                            .anyMatch(Boolean.TRUE::equals);
+
+            pcsStatusMap.put(pcsId, hasFault ? "고장" : "정상");
+        }
+
+
+        /* =====================================================
+         * 🟨 5️⃣ PCS 상태 테이블 (표시 전용)
+         * - 판결 ❌
+         * ===================================================== */
+        // PCS 개수
         model.addAttribute("pcsTotalCount", pcsCount);
-        model.addAttribute("pcsList", pcsStatusRowService.getStatusRows());
+
+        // PCS 상태 테이블 (1회 생성)
+        List<PcsStatusTableRowViewDto> pcsList =
+                pcsStatusTableService.getRows(pcsCount);
+        model.addAttribute("pcsList", pcsList);
+
+        // 정상 운영중인 PCS 개수
+        long pcsRunningCount =
+                pcsList.stream()
+                        .filter(r -> "정상".equals(r.getStatus()))
+                        .count();
+        model.addAttribute("pcsRunningCount", pcsRunningCount);
 
 
 
-        /* =========================
-         * 6️⃣ 🔴 선택된 PCS 기준 고장정보
-         * ========================= */
+        /* =====================================================
+         * 🔴 6️⃣ 선택된 PCS 고장 상세
+         * ===================================================== */
         model.addAttribute(
                 "pcsFaultItems",
-                pcsFaultDetailService.getFaultDetails((long) selectedPcsNo)
+                pcsFaultDetailService.getFaultItems(selectedPcsId)
         );
 
         return "index";
     }
+
+
+
+
+
+
 
 
 

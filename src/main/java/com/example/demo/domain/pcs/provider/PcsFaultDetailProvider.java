@@ -1,24 +1,23 @@
 package com.example.demo.domain.pcs.provider;
 
 import com.example.demo.domain.pcs.status.PcsFaultType;
+
 import java.util.Map;
 
 /**
- * PCS Fault 상세 Provider
+ * PCS Fault Detail Provider
  *
- * 책임:
- * - PCS 개별 Fault Bit 제공
- * - Raw 상태만 반환
- * - 해석/표현은 Service 책임
+ * - PCS 단위 고장 RAW Map 제공
+ * - 판단 / 집계 / UI 로직 금지
  */
 public interface PcsFaultDetailProvider {
 
     /**
-     * PCS Fault 상세 상태 조회
+     * PCS 개별 Fault 상태 Map
      *
-     * @param pcsId PCS 식별자
-     * @return FaultType 별 발생 여부
+     * @param pcsNo PCS 번호
+     * @return FaultType -> 발생 여부
      */
-    Map<PcsFaultType, Boolean> getFaultStatus(Long pcsId);
+    Map<PcsFaultType, Boolean> getFaultStatus(Long pcsNo);
 }
 

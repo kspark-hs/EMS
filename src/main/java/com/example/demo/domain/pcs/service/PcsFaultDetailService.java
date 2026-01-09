@@ -1,41 +1,53 @@
 package com.example.demo.domain.pcs.service;
 
-import com.example.demo.domain.pcs.provider.PcsFaultDetailProvider;
+import com.example.demo.domain.pcs.fault.PcsFaultSnapshot;
+import com.example.demo.domain.pcs.fault.PcsFaultSnapshotService;
 import com.example.demo.domain.pcs.status.PcsFaultType;
 import com.example.demo.domain.pcs.view.PcsFaultDetailViewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
+/**
+ * PCS Fault Detail Service
+ *
+ * 역할:
+ * - PCS 고장 상세 화면용 DTO 생성
+ *
+ * 원칙:
+ * - ❌ 고장 판단 로직 금지
+ * - ❌ Provider 직접 호출 금지
+ * - ✅ Snapshot 결과만 View로 변환
+ */
 @Service
 @RequiredArgsConstructor
 public class PcsFaultDetailService {
 
-    private final PcsFaultDetailProvider provider;
+    private final PcsFaultSnapshotService snapshotService;
 
-    public List<PcsFaultDetailViewDto> getFaultDetails(Long pcsId) {
+    public List<PcsFaultDetailViewDto> getFaultItems(Long pcsId) {
 
-        Map<PcsFaultType, Boolean> faultMap =
-                provider.getFaultStatus(pcsId);
+        PcsFaultSnapshot snapshot =
+                snapshotService.getSnapshot(pcsId);
 
-        List<PcsFaultDetailViewDto> result = new ArrayList<>();
+        return snapshot.getFaultMap()
+                .entrySet()
+                .stream()
+                .map(entry -> toDto(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+    }
 
-        for (PcsFaultType type : PcsFaultType.values()) {
-            boolean fault = faultMap.getOrDefault(type, false);
+    /**
+     * Snapshot 결과 → 화면 DTO 변환
+     */
+    private PcsFaultDetailViewDto toDto(PcsFaultType faultType, Boolean fault) {
 
-            result.add(
-                    new PcsFaultDetailViewDto(
-                            type.getLabel(),      // 화면 표시명
-                            fault,                // 고장 여부
-                            type.getGroupKey()    // IGBT 등 그룹 키 (없으면 null)
-                    )
-            );
-        }
-
-        return result;
+        return new PcsFaultDetailViewDto(
+                faultType.getLabel(),          // 화면 표시용 이름
+                Boolean.TRUE.equals(fault),    // 고장 여부
+                faultType.name()               // 그룹키 (통합 기준)
+        );
     }
 }
-

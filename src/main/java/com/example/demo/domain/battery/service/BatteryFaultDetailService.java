@@ -6,7 +6,7 @@ import com.example.demo.domain.battery.view.BatteryFaultDetailViewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,35 +17,40 @@ public class BatteryFaultDetailService {
     private final BatteryFaultDetailProvider provider;
 
     /**
-     * 배터리 고장 상세 목록 조회
+     * 🔴 Rack 고장 상세 (PCS와 동일 패턴)
      *
-     * 책임:
-     * - Provider에서 Raw fault map 수신
-     * - Enum 전체 순회
-     * - ViewDto 조립
+     * 기준:
+     * - 고장 최소 단위 = Rack
+     * - BatteryAbnormalType 전체 항목 항상 노출
+     * - 발생 여부만 true / false
      *
-     * ※ PCS 패턴과 1:1 동일
+     * ※ Battery 전체 OR 집계 고장 개념은 제거됨
      */
-    public List<BatteryFaultDetailViewDto> getFaultDetails(Long batteryId) {
+    public List<BatteryFaultDetailViewDto> getRackFaultDetails(Long rackId) {
 
-        Map<BatteryAbnormalType, Boolean> faultMap =
-                provider.getFaultStatus(batteryId);
+        Map<String, Boolean> faultMap = new LinkedHashMap<>();
 
-        List<BatteryFaultDetailViewDto> result = new ArrayList<>();
-
+        // 1️⃣ BatteryAbnormalType 전체 초기화
         for (BatteryAbnormalType type : BatteryAbnormalType.values()) {
-            boolean fault = faultMap.getOrDefault(type, false);
-
-            result.add(
-                    new BatteryFaultDetailViewDto(
-                            null,                // rackNo (현재 단계에서는 null)
-                            type.getLabel(),     // 화면 표시명
-                            fault,               // 고장 여부
-                            type.getGroupKey()   // 그룹 키
-                    )
-            );
+            faultMap.put(type.getLabel(), false);
         }
 
-        return result;
+        // 2️⃣ 실제 Rack 고장 반영
+        List<BatteryFaultDetailViewDto> occurred =
+                provider.getFaultDetails(rackId);
+
+        for (BatteryFaultDetailViewDto dto : occurred) {
+            faultMap.put(dto.faultName(), true);
+        }
+
+        // 3️⃣ View DTO 생성
+        return faultMap.entrySet().stream()
+                .map(e -> new BatteryFaultDetailViewDto(
+                        null,       // rackNo (현재 UI 미사용)
+                        e.getKey(), // faultName
+                        e.getValue(), // occurred
+                        null        // groupKey (차후 확장 여지)
+                ))
+                .toList();
     }
 }

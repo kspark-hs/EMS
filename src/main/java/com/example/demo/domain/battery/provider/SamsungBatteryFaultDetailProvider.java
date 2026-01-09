@@ -1,36 +1,43 @@
 package com.example.demo.domain.battery.provider;
 
 import com.example.demo.domain.battery.status.BatteryAbnormalType;
+import com.example.demo.domain.battery.view.BatteryFaultDetailViewDto;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
-/**
- * Samsung 배터리 고장 상세 Provider (더미 구현)
- *
- * - Raw 데이터 제공 전용
- * - 판단 / 집계 / UI 해석 ❌
- * - BatteryAbnormalType 기준 Map 반환
- */
 @Component
 public class SamsungBatteryFaultDetailProvider
         implements BatteryFaultDetailProvider {
 
     @Override
-    public Map<BatteryAbnormalType, Boolean> getFaultStatus(Long batteryId) {
+    public List<BatteryFaultDetailViewDto> getFaultDetails(Long rackId) {
 
-        Map<BatteryAbnormalType, Boolean> map =
+        Map<BatteryAbnormalType, Boolean> raw =
                 new EnumMap<>(BatteryAbnormalType.class);
 
-        // 🔸 기본값: 전부 false (항상 화면에 표시되게)
-        for (BatteryAbnormalType type : BatteryAbnormalType.values()) {
-            map.put(type, false);
+        // 🔴 더미 RAW (장비 연동 전)
+        raw.put(BatteryAbnormalType.CELL_OVER_VOLTAGE, false);
+        raw.put(BatteryAbnormalType.CELL_UNDER_VOLTAGE, false);
+        raw.put(BatteryAbnormalType.CELL_OVER_TEMPERATURE, true);
+        raw.put(BatteryAbnormalType.RACK_SYSTEM_COMMUNICATION_FAIL, false);
+
+        List<BatteryFaultDetailViewDto> result = new ArrayList<>();
+
+        for (Map.Entry<BatteryAbnormalType, Boolean> entry : raw.entrySet()) {
+            result.add(
+                    new BatteryFaultDetailViewDto(
+                            rackId.intValue(),           // rackNo
+                            entry.getKey().getLabel(),   // faultName
+                            entry.getValue(),            // occurred
+                            null                         // groupKey (Service에서 판단)
+                    )
+            );
         }
 
-        // 🔴 더미 고장 예시 (통신 이상 하나만 ON)
-        map.put(BatteryAbnormalType.RACK_SYSTEM_COMMUNICATION_FAIL, true);
-
-        return map;
+        return result;
     }
 }

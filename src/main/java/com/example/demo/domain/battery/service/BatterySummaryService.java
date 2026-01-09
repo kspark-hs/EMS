@@ -2,10 +2,12 @@ package com.example.demo.domain.battery.service;
 
 import com.example.demo.domain.battery.dto.BatterySummaryDto;
 import com.example.demo.domain.battery.provider.BatterySummaryProvider;
+import com.example.demo.domain.battery.status.ActionStatus;
 import com.example.demo.domain.battery.view.BatterySummaryViewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.example.demo.domain.battery.status.ActionStatus;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -13,9 +15,13 @@ public class BatterySummaryService {
 
     private final BatterySummaryProvider batterySummaryProvider;
 
-    public BatterySummaryViewDto getSummary(Long batteryId) {
+    public BatterySummaryViewDto getSummary(List<Long> rackIds) {
 
-        BatterySummaryDto raw = batterySummaryProvider.getSummary(batteryId);
+        // 현재 Summary Raw 는 rack 기준 미지원 → 대표 rack(첫 번째) 기준
+        Long representativeRackId = rackIds.get(0);
+
+        BatterySummaryDto raw =
+                batterySummaryProvider.getSummary(representativeRackId);
 
         BatterySummaryViewDto view = new BatterySummaryViewDto();
 
@@ -44,5 +50,4 @@ public class BatterySummaryService {
             default -> ActionStatus.READY;
         };
     }
-
 }

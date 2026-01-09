@@ -1,6 +1,6 @@
 package com.example.demo.domain.equipment.airconditioner.service;
 
-import com.example.demo.domain.equipment.airconditioner.view.AirConditionerViewDto;
+import com.example.demo.domain.equipment.airconditioner.view.AirConditionerSummaryViewDto;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface AirConditionerService {
      * - 운전 모드, 설정 온도, 풍량 등
      * - 충방전 판단과는 직접 관계 없음
      */
-    AirConditionerViewDto getView(String airConditionerId);
+    AirConditionerSummaryViewDto getView(String airConditionerId);
 
     /**
      * 에어컨 목록 조회 (select용)
@@ -21,7 +21,7 @@ public interface AirConditionerService {
      * - 다중 에어컨 지원
      * - UI select와 1:1 대응
      */
-    List<AirConditionerViewDto> getAirConditionerList();
+    List<AirConditionerSummaryViewDto> getAirConditionerList();
 
     /**
      * 자동 제어 판단 및 실행

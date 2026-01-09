@@ -12,6 +12,7 @@ public class BatterySummaryViewDto {
     /** 메인 릴레이 상태 */
     private String relayStatus;
 
+
     /** 동작 상태 (충전/방전/대기 등) */
     private ActionStatus actionStatus;
 

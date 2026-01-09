@@ -4,7 +4,7 @@ import com.example.demo.domain.equipment.airconditioner.provider.AirConditionerP
 import com.example.demo.domain.equipment.airconditioner.status.ControlMode;
 import com.example.demo.domain.equipment.airconditioner.status.FanSpeed;
 import com.example.demo.domain.equipment.airconditioner.status.OperationMode;
-import com.example.demo.domain.equipment.airconditioner.view.AirConditionerViewDto;
+import com.example.demo.domain.equipment.airconditioner.view.AirConditionerSummaryViewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +27,9 @@ public class AirConditionerServiceImpl implements AirConditionerService {
     private final AirConditionerProvider provider;
 
     @Override
-    public AirConditionerViewDto getView(String airConditionerId) {
+    public AirConditionerSummaryViewDto getView(String airConditionerId) {
 
-        AirConditionerViewDto dto = new AirConditionerViewDto();
+        AirConditionerSummaryViewDto dto = new AirConditionerSummaryViewDto();
 
         dto.setAcId(airConditionerId);
         dto.setVendor("LG");
@@ -49,7 +49,7 @@ public class AirConditionerServiceImpl implements AirConditionerService {
     }
 
     @Override
-    public List<AirConditionerViewDto> getAirConditionerList() {
+    public List<AirConditionerSummaryViewDto> getAirConditionerList() {
         return List.of(
                 getView("AC-01"),
                 getView("AC-02")
@@ -59,7 +59,7 @@ public class AirConditionerServiceImpl implements AirConditionerService {
     @Override
     public void autoControlIfNeeded(String airConditionerId) {
 
-        AirConditionerViewDto ac = getView(airConditionerId);
+        AirConditionerSummaryViewDto ac = getView(airConditionerId);
 
         // MANUAL 모드면 자동 제어 금지
         if (ac.getControlMode() == ControlMode.MANUAL) return;
